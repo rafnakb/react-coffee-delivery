@@ -7,6 +7,12 @@ export const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  :root {
+    --fullSize: 100%;
+    --wideSize: 1440px;
+    --contentSize: 1120px;
+  }
+
   :focus {
     outline: 0;
   }

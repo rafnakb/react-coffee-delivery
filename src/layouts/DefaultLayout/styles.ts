@@ -3,9 +3,8 @@ import styled from "styled-components";
 export const LayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 90rem;
-  padding: 2rem 10rem;
+  max-width: var(--wideSize);
+  padding: 2rem 0;
   margin: 0 auto;
-
-  background: ${(props) => props.theme['gray-300']};
+  background: ${(props) => props.theme['white-100']};
 `;
