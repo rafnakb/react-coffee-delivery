@@ -7,7 +7,6 @@ export const WideHomeContainer = styled.main`
   align-items: center;
   justify-content: center;
   width: var(--wideSize);
-  background-image: url('src/assets/hero-background.png');
 `;
 
 export const ContentHomeContainer = styled.div`

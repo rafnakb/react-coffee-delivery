@@ -1,16 +1,15 @@
+import { Product } from "./Product";
+
 export function Products() {
   return (
-    <div>
-      <header>Nossos cafés</header>
-      <h3>Lista de café</h3>
-    </div>
+    <Product />
   );
 }
 
 const PRODUCTS = [
   {
     id: 1,
-    tags: ['TRADICIONAL'],
+    filter: ['TRADICIONAL'],
     name: 'Expresso Tradicional',
     description: 'O tradicional café feito com água quente e grãos moídos',
     price: 9.9

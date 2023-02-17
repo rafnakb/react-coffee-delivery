@@ -4,6 +4,9 @@ export const HeroContaier = styled.div`
   display: flex;
   flex-direction: row;
   gap: 3.5rem;
+  padding: 5.875rem 0 6.75rem 0;
+  width: var(--wideSize);
+  background-image: url('src/assets/hero-background.png');
 
   img {
     width: 476px;
