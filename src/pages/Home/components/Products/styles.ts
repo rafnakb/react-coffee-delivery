@@ -31,7 +31,7 @@ export const ProductsContainer = styled.div`
   }
 `;
 
-export const FilterBox = styled.span`
+export const TagBox = styled.button`
   font-family: 'Roboto';
   font-weight: 700;
   font-size: 10px;
@@ -40,4 +40,17 @@ export const FilterBox = styled.span`
   border: 1px solid ${props => props.theme['yellow-500']};
   border-radius: 12px;
   padding: 6px 12px;
+
+  &:hover {
+    border: 1px solid ${props => props.theme['yellow-300']};
+    background: ${props => props.theme['yellow-300']};
+    cursor: default;
+  }
+`;
+
+export const ProductsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 2.5rem 2rem;
+  padding-bottom: 4rem;
 `;

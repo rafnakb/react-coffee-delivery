@@ -17,6 +17,10 @@ export const GlobalStyles = createGlobalStyle`
     outline: 0;
   }
 
+  button {
+    all: unset;
+  }
+
   body {
     background: ${(props: ThemeProps<DefaultTheme>) => props.theme['white-100']};
     color: ${(props: ThemeProps<DefaultTheme>) => props.theme['gray-700']};
