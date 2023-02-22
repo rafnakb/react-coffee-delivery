@@ -5,10 +5,10 @@ import { WideHomeContainer, ContentHomeContainer } from "./styles";
 export function Home() {
   return (
     <WideHomeContainer>
-      {/* <ContentHomeContainer> */}
         <HeroContent />
+      <ContentHomeContainer>
         <Products />
-      {/* </ContentHomeContainer> */}
+      </ContentHomeContainer>
     </WideHomeContainer>
   );
 }

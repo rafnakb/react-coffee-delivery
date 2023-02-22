@@ -1,12 +1,18 @@
 import styled from "styled-components";
 
 export const HeroContaier = styled.div`
+  width: var(--wideSize);
+  background-image: url('src/assets/hero-background.png');
+`;
+
+export const HeroContentContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 3.5rem;
-  padding: 5.875rem 0 6.75rem 0;
-  width: var(--wideSize);
-  background-image: url('src/assets/hero-background.png');
+  margin: 0 auto;
+  width: var(--contentSize);
+  padding-top: 94px;
+  padding-bottom: 108px;
 
   img {
     width: 476px;
