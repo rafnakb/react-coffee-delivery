@@ -31,7 +31,11 @@ export const ProductsContainer = styled.div`
   }
 `;
 
-export const TagBox = styled.button`
+interface TagProps {
+  isSelected: boolean;
+}
+
+export const TagBox = styled.button<TagProps>`
   font-family: 'Roboto';
   font-weight: 700;
   font-size: 10px;
@@ -45,6 +49,12 @@ export const TagBox = styled.button`
     border: 1px solid ${props => props.theme['yellow-300']};
     background: ${props => props.theme['yellow-300']};
     cursor: default;
+    transition: all 0.2s;
+  }
+
+  & {
+    border: 1px solid ${select => select.isSelected ? props => props.theme['yellow-300'] : props => props.theme['yellow-500']};
+    background: ${select => select.isSelected ? props => props.theme['yellow-300'] : 'none'};
   }
 `;
 
@@ -53,4 +63,14 @@ export const ProductsGrid = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 2.5rem 2rem;
   padding-bottom: 4rem;
+`;
+
+export const EmptyList = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 24px;
+  gap: 16px;
+  padding: 1rem 0;
+  color: ${props => props.theme['gray-600']};
 `;

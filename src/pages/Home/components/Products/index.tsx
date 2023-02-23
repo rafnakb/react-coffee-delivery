@@ -1,6 +1,7 @@
+import { Coffee } from "phosphor-react";
 import { useState } from "react";
 import { Product } from "./Product";
-import { TagBox, ProductsContainer, ProductsGrid } from "./styles";
+import { TagBox, ProductsContainer, ProductsGrid, EmptyList } from "./styles";
 
 interface ProductModel {
   id: number;
@@ -18,9 +19,9 @@ interface FilterModel {
 
 export function Products() {
   const [products, setProducts] = useState<ProductModel[]>(PRODUCTS);
-  const [filterTags, setFilterTags] = useState<FilterModel[]>([]);
 
   let allTags: string[] = [];
+  let tagObj: FilterModel[];
 
   products.map(product => {
     product.tags.forEach(tag => {
@@ -28,33 +29,60 @@ export function Products() {
     })
   })
   allTags = [...new Set(allTags)];
-  // setFilterTags([...new Set(allTags)]);
 
-  setFilterTags([{
-    tag: '',
-    isSelected: false
-  }]);
+  tagObj = allTags.map(str => {
+    return {
+      tag: str.toString(),
+      isSelected: false
+    };
+  })
+  const [filterList, setFilterList] = useState<FilterModel[]>(tagObj);
 
-  function handleFilteredProductTable() {
-    products.map(product => {
-
+  function handleFilteredProductTable(filteredTag: string) {
+    const updateFilterTags = filterList.map(tag => {
+      if (tag.tag === filteredTag) {
+        return { ...tag, isSelected: !tag.isSelected }
+      }
+      return tag;
     })
+    setFilterList(updateFilterTags);
+
+    const hasFilter = updateFilterTags.some(tag => tag.isSelected === true);
+
+    if (hasFilter === true) {
+      const updateProductList = products.filter(product => {
+        return product.tags.some(value => filteredTag.includes(value));
+      })
+      setProducts(updateProductList);
+    } else {
+      setProducts(PRODUCTS);
+    }
   }
+
+  const isProductListEmpty = products.length === 0;
 
   return (
     <ProductsContainer>
       <header>
         <p>Nossos cafés</p>
         <div>
-          {allTags.map(tag => {
+          {filterList.map(tag => {
             return <TagBox
-              key={tag.toString()}
+              key={tag.tag}
+              isSelected={tag.isSelected}
+              onClick={() => handleFilteredProductTable(tag.tag)}
             >
-              {tag.toString()}
+              {tag.tag}
             </TagBox>
           })}
         </div>
       </header>
+      {isProductListEmpty && (
+        <EmptyList>
+          <Coffee size={54} weight="fill" />
+          Nenhum produto encontrado
+        </EmptyList>
+      )}
       <ProductsGrid>
         {products.map((product: ProductModel) => {
           return <Product
