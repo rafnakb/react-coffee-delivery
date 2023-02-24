@@ -12,6 +12,12 @@ export const CheckoutContainer = styled.div`
   font-family: 'Baloo 2';
   font-size: 18px;
   font-weight: 700;
+
+  .completeInfo{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 `;
 
 export const PaymentContainer = styled.div`

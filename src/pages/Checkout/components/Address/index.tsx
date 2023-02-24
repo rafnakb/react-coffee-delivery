@@ -1,20 +1,17 @@
 import { MapPinLine } from "phosphor-react";
+import { HeaderTitle } from "../HeaderTitle";
 import { IconContainer } from "../Icon/styles";
-import { AddressContainer, Column, FormContainer, Input, SubtitleAndText } from "./styles";
+import { AddressContainer, Column, FormContainer, Input } from "./styles";
 
 export function Address() {
   return (
     <AddressContainer>
-      <header>
-        <IconContainer iconColor="yellowDark">
-          <MapPinLine size={22} />
-        </IconContainer>
-        <SubtitleAndText>
-          Endereço de Entrega
-          <p>Informe o endereço onde deseja receber seu pedido</p>
-        </SubtitleAndText>
-      </header>
-
+      <HeaderTitle
+        icon={<MapPinLine size={22} />}
+        iconColor={'yellowDark'}
+        title={'Endereço de Entrega'}
+        subtitle={'Informe o endereço onde deseja receber seu pedido'}
+      />
       <FormContainer>
         <div>
           <Column numGrid={39}>

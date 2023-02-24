@@ -1,6 +1,6 @@
-import { MapPinLine } from "phosphor-react";
 import { Address } from "./components/Address";
-import { Products } from "./components/Products";
+import { Payment } from "./components/Payment";
+import { Products } from "./components/ProductSelected";
 import {
   CheckoutContainer,
 } from "./styles";
@@ -10,11 +10,11 @@ export function Checkout() {
     <CheckoutContainer>
       <span>Complete seu pedido</span>
       <span>Cafés selecionados</span>
-
-      <Address />
-
+      <div className="completeInfo">
+        <Address />
+        <Payment />
+      </div>
       <Products />
-
     </CheckoutContainer>
   );
 }
