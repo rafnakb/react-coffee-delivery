@@ -6,8 +6,8 @@ export const WideHomeContainer = styled.main`
   align-items: center;
   justify-content: center;
   width: var(--wideSize);
-`;
 
-export const ContentHomeContainer = styled.div`
-  width: var(--contentSize);
+  .contentSize {
+    width: var(--contentSize);
+  }
 `;

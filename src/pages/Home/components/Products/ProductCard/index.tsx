@@ -6,7 +6,7 @@ import {
   CartButton,
   OrderCountContainer,
   PriceBox,
-  ProductCard,
+  ProductCardContainer,
   TagContainer,
 } from "./styles";
 
@@ -19,7 +19,7 @@ interface ProductProps {
   imageUrl: string;
 }
 
-export function Product({ ...props }: ProductProps) {
+export function ProductCard({ ...props }: ProductProps) {
 
   const [quantityOfProduct, setQuantityOfProduct] = useState(1);
 
@@ -40,7 +40,7 @@ export function Product({ ...props }: ProductProps) {
   }
 
   return (
-    <ProductCard>
+    <ProductCardContainer>
       <img src={props.imageUrl} alt="" />
       <TagContainer>
         {props.tags.map(tag => {
@@ -78,6 +78,6 @@ export function Product({ ...props }: ProductProps) {
           </CartButton>
         </div>
       </BuyContainer>
-    </ProductCard>
+    </ProductCardContainer>
   );
 }

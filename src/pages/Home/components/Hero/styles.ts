@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const HeroContaier = styled.div`
+export const HeroContainer = styled.div`
   width: var(--wideSize);
   background-image: url('src/assets/hero-background.png');
 `;

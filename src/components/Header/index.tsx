@@ -1,8 +1,11 @@
 import { ShoppingCart, MapPin } from "phosphor-react";
 import { NavLink } from "react-router-dom";
-import { HeaderContainer } from "./styles";
+import { CartItemCounter, HeaderContainer } from "./styles";
 
 export function Header() {
+
+  const isEmptyCart = 0 === 0;
+
   return (
     <HeaderContainer>
       <img src="src/assets/coffee-logo.svg" alt="" />
@@ -11,9 +14,14 @@ export function Header() {
           <MapPin size={20} weight="fill" />
           <p>Cedral, SP</p>
         </span>
-        <NavLink to="" title="Carrinho de compras">
+        <NavLink to="/checkout" title="Carrinho de compras">
           <ShoppingCart size={20} weight="fill" />
         </NavLink>
+        {isEmptyCart && (
+          <CartItemCounter>
+            2
+          </CartItemCounter>
+        )}
       </nav>
     </HeaderContainer>
   );

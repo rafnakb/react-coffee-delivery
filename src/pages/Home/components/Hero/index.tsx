@@ -1,5 +1,5 @@
 import {
-  HeroContaier,
+  HeroContainer,
   TitleContainer,
   Icon,
   IconTitleContainer,
@@ -11,7 +11,7 @@ import { Coffee, Package, ShoppingCart, Timer } from 'phosphor-react'
 
 export function HeroContent() {
   return (
-    <HeroContaier>
+    <HeroContainer>
       <HeroContentContainer>
         <LeftHeroContainer>
           <TitleContainer>
@@ -55,6 +55,6 @@ export function HeroContent() {
 
         <img src="src/assets/hero-coffee.svg" alt="" />
       </HeroContentContainer>
-    </HeroContaier>
+    </HeroContainer>
   );
 }

@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  node:
+    image: "node:lts-alpine"
+    user: node
+    working_dir: /home/node/app
+    volumes:
+      - ${PWD-.}:/home/node/app
+    ports:
+      - 3000:3000
+    command: sh -c "npm install && npm start"

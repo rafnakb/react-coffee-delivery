@@ -7,6 +7,7 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   width: var(--contentSize);
   margin: 0 auto;
+  height: 6.5rem;
 
   img {
     width: 84.95px;
@@ -41,4 +42,23 @@ export const HeaderContainer = styled.header`
     }
   }
 
+`;
+
+export const CartItemCounter = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  color: ${props => props.theme['white-100']};
+  background: ${props => props.theme['yellow-700']};
+
+  font-family: 'Roboto';
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+  position: relative;
+  top: -8px;
+  right: 24px;
 `;
