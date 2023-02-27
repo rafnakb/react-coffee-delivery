@@ -1,6 +1,7 @@
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { OrderContext, OrdersData } from "../../../../../contexts/OrderContext";
 import {
   BuyContainer,
   CartButton,
@@ -20,6 +21,10 @@ interface ProductProps {
 }
 
 export function ProductCard({ ...props }: ProductProps) {
+  const {
+    orders,
+    addItemToOrder
+  } = useContext(OrderContext);
 
   const [quantityOfProduct, setQuantityOfProduct] = useState(1);
 
@@ -37,6 +42,14 @@ export function ProductCard({ ...props }: ProductProps) {
     setQuantityOfProduct((state) => {
       return state + 1;
     })
+  }
+
+  function handleAddItemToOrder() {
+    const newItem: OrdersData = {
+      id: props.id,
+      quantity: quantityOfProduct
+    }
+    addItemToOrder([...orders, newItem]);
   }
 
   return (
@@ -73,7 +86,7 @@ export function ProductCard({ ...props }: ProductProps) {
               <Plus size={14} weight="bold" />
             </button>
           </OrderCountContainer>
-          <CartButton title="Adicionar ao carrinho">
+          <CartButton title="Adicionar ao carrinho" onClick={handleAddItemToOrder}>
             <ShoppingCartSimple size={22} weight="fill" />
           </CartButton>
         </div>

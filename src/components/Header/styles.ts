@@ -3,11 +3,21 @@ import styled from "styled-components";
 export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
-  flex-direction: row;
-  justify-content: space-between;
-  width: var(--contentSize);
-  margin: 0 auto;
+  width: var(--wideSize);
+  background: ${props => props.theme['white-100']};
+  z-index: 999px;
   height: 6.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+
+  .contentSize {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: var(--contentSize);
+    margin: 0 auto;
+  }
 
   img {
     width: 84.95px;
@@ -57,8 +67,7 @@ export const CartItemCounter = styled.label`
   font-family: 'Roboto';
   font-weight: 700;
   font-size: 12px;
-  text-align: center;
-  position: relative;
-  top: -8px;
-  right: 24px;
+  position: absolute;
+  top: 24px;
+  right: 150px;
 `;

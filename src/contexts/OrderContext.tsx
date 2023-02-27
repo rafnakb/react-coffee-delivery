@@ -1,15 +1,19 @@
 import { createContext, ReactNode, useState } from "react";
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 
-interface CreateOrderData {
-  id: string;
+export interface OrdersData {
+  id: number;
   quantity: number;
 }
 
 interface OrderContextType {
+  PRODUCTS: ProductModel[],
   products: ProductModel[];
   handleFilteredProductTable: (filteredTag: string) => void;
   filterList: FilterModel[];
+  orders: OrdersData[];
+  addItemToOrder: (list: OrdersData[]) => void;
+  numberOfItemsInOrder: number;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -19,11 +23,35 @@ interface OrderContextProviderProps {
 }
 
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
-
   const [products, setProducts] = useState<ProductModel[]>(PRODUCTS);
-  
+  const [orders, setOrders] = useState<OrdersData[]>([]);
+
+  function addItemToOrder(list: OrdersData[]) {
+    const mergedOrders = list.reduce((sumOrders: OrdersData[], currencyOrders) => {
+      const existingOrder = sumOrders.find((order) => order.id === currencyOrders.id);
+      if (existingOrder) {
+        existingOrder.quantity = existingOrder.quantity + currencyOrders.quantity
+      } else {
+        sumOrders.push(currencyOrders);
+      }
+      return sumOrders;
+    }, []);
+
+    setOrders(mergedOrders);
+    console.log(mergedOrders)
+  }
+
+  function countNumberOfItemsInOrder() {
+    let total = 0;
+    orders.map(order => {
+      return total = total + order.quantity;
+    })
+    return total;
+  }
+
+  const numberOfItemsInOrder = countNumberOfItemsInOrder();
+
   let allTags: string[] = [];
-  let tagObj: FilterModel[];
 
   products.map(product => {
     product.tags.forEach(tag => {
@@ -32,6 +60,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   })
   allTags = [...new Set(allTags)];
 
+  let tagObj: FilterModel[];
   tagObj = allTags.map(str => {
     return {
       tag: str.toString(),
@@ -64,9 +93,13 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   return (
     <OrderContext.Provider
       value={{
+        PRODUCTS,
         products,
         handleFilteredProductTable,
-        filterList
+        filterList,
+        orders,
+        addItemToOrder,
+        numberOfItemsInOrder
       }}
     >
       {children}

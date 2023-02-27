@@ -7,6 +7,13 @@ export const ProductsSelectedContainer = styled.div`
   background: ${props => props.theme['gray-100']};
   border-radius: 6px 44px;
   gap: 1.5rem;
+
+  p.empty {
+    text-align: center;
+    font-family: 'Roboto';
+    font-size: 18px;
+    color: ${props => props.theme['gray-800']};
+  }
 `;
 
 export const ItemFromOrderContainer = styled.div`
@@ -51,6 +58,7 @@ export const ItemFromOrderContainer = styled.div`
     font-size: 16px;
     text-align: right;
   }
+
 `;
 
 export const Divider = styled.hr`

@@ -2,9 +2,9 @@ import styled from "styled-components";
 
 export const CheckoutContainer = styled.div`
   display: grid;
-  max-width: var(--contentSize);
+  width: var(--contentSize);
   margin: 0 auto;
-  grid-template-columns: 40rem 28rem;
+  grid-template-columns: 40rem 1fr;
   gap: 0.75rem 2rem;
   padding-top: 2.5rem;
   align-items: flex-start;
