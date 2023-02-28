@@ -1,19 +1,36 @@
 import { createContext, ReactNode, useState } from "react";
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as zod from 'zod';
+import { useForm } from "react-hook-form";
 
 export interface OrdersData {
   id: number;
   quantity: number;
+  address: [
+    {
+      cep: string;
+      rua: string;
+      numero: string;
+      complemento: string;
+      bairro: string;
+      cidade: string;
+      uf: string;
+    }
+  ];
+  payment: number; // (1: cartão de crédito; 2: cartão débito; 3: dinheiro)
 }
 
 interface OrderContextType {
-  PRODUCTS: ProductModel[],
-  products: ProductModel[];
+  allProducts: ProductModel[],
   handleFilteredProductTable: (filteredTag: string) => void;
   filterList: FilterModel[];
+  filteredProducts: ProductModel[];
   orders: OrdersData[];
   addItemToOrder: (list: OrdersData[]) => void;
   numberOfItemsInOrder: number;
+  increaseDecreaseQuantity: (id: number, addOrRemove: string) => void;
+  deleteItemFromOrder: (id: number) => void;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -23,8 +40,9 @@ interface OrderContextProviderProps {
 }
 
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
-  const [products, setProducts] = useState<ProductModel[]>(PRODUCTS);
+  const allProducts = PRODUCTS;
   const [orders, setOrders] = useState<OrdersData[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>(allProducts);
 
   function addItemToOrder(list: OrdersData[]) {
     const mergedOrders = list.reduce((sumOrders: OrdersData[], currencyOrders) => {
@@ -38,8 +56,36 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }, []);
 
     setOrders(mergedOrders);
-    console.log(mergedOrders)
   }
+
+  function increaseDecreaseQuantity(id: number, addOrRemove: string) {
+    if (addOrRemove === 'add') {
+      const updateOrderList = orders.map(item => {
+        if (item.id === id) {
+          return { ...item, quantity: item.quantity += 1 }
+        }
+        return item;
+      });
+      setOrders(updateOrderList);
+    }
+    if (addOrRemove === 'remove') {
+      const updateOrderList = orders.map(item => {
+        if ((item.id === id) && (item.quantity > 1)) {
+          return { ...item, quantity: item.quantity -= 1 }
+        }
+        return item;
+      });
+      setOrders(updateOrderList);
+    }
+  }
+
+  function deleteItemFromOrder(id: number) {
+    const updateOrderList = orders.filter(item => {
+      return item.id !== id;
+    });
+    setOrders(updateOrderList);
+  }
+
 
   function countNumberOfItemsInOrder() {
     let total = 0;
@@ -53,7 +99,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   let allTags: string[] = [];
 
-  products.map(product => {
+  allProducts.map(product => {
     product.tags.forEach(tag => {
       allTags.push(tag.toString());
     })
@@ -81,25 +127,27 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     const hasFilter = updateFilterTags.some(tag => tag.isSelected === true);
 
     if (hasFilter === true) {
-      const updateProductList = products.filter(product => {
+      const updateProductList = filteredProducts.filter(product => {
         return product.tags.some(value => filteredTag.includes(value));
       })
-      setProducts(updateProductList);
+      setFilteredProducts(updateProductList);
     } else {
-      setProducts(PRODUCTS);
+      setFilteredProducts(allProducts);
     }
   }
 
   return (
     <OrderContext.Provider
       value={{
-        PRODUCTS,
-        products,
+        allProducts,
         handleFilteredProductTable,
         filterList,
+        filteredProducts,
         orders,
         addItemToOrder,
-        numberOfItemsInOrder
+        numberOfItemsInOrder,
+        increaseDecreaseQuantity,
+        deleteItemFromOrder
       }}
     >
       {children}

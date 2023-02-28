@@ -11,6 +11,11 @@ export const HeaderContainer = styled.header`
   top: 0;
   z-index: 999;
 
+  a {
+    display: flex;
+    text-decoration: none;
+  }
+
   .contentSize {
     display: flex;
     flex-direction: row;

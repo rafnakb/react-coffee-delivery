@@ -20,12 +20,12 @@ export interface FilterModel {
 
 export function Products() {
   const {
-    products,
+    filteredProducts,
     handleFilteredProductTable,
     filterList
   } = useContext(OrderContext);
 
-  const isProductListEmpty = products.length === 0;
+  const isProductListEmpty = filteredProducts.length === 0;
 
   return (
     <ProductsContainer>
@@ -50,7 +50,7 @@ export function Products() {
         </EmptyList>
       )}
       <ProductsGrid>
-        {products.map((product: ProductModel) => {
+        {filteredProducts.map((product: ProductModel) => {
           return <ProductCard
             key={product.id}
             id={product.id}

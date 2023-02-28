@@ -19,6 +19,7 @@ export const GlobalStyles = createGlobalStyle`
 
   button {
     all: unset;
+    cursor: pointer;
   }
 
   body {

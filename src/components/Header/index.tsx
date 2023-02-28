@@ -14,7 +14,9 @@ export function Header() {
   return (
     <HeaderContainer>
       <div className="contentSize">
-        <img src="src/assets/coffee-logo.svg" alt="" />
+        <a href="/">
+          <img src="src/assets/coffee-logo.svg" alt="" />
+        </a>
         <nav>
           <span>
             <MapPin size={20} weight="fill" />

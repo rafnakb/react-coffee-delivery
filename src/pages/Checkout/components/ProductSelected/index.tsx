@@ -1,74 +1,96 @@
-import { IconTextButton } from "../../../../components/TrashButton";
 import { ProductCounter } from "../../../../components/ProductCounter";
-import { ConfirmButton, Divider, ItemFromOrderContainer, PricesInfoContainer, ProductsSelectedContainer } from "./styles";
-import { useContext } from "react";
+import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, ProductsSelectedContainer, TrashButtonContainer } from "./styles";
+import React, { useContext } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
+import { ShoppingCart, Trash } from "phosphor-react";
+import { formatCoinToBrazil } from "../../../../utils/text-formatter";
 
 export function Products() {
   const {
-    PRODUCTS,
-    orders
+    allProducts,
+    orders,
+    deleteItemFromOrder
   } = useContext(OrderContext);
 
   const isEmptyOrder = orders.length === 0;
+
+  let totalValueOfItems: number = 0;
+  let delivery: number = 3.5;
+
+  function handleDeleteItem(id: number) {
+    deleteItemFromOrder(id)
+  }
 
   return (
     <ProductsSelectedContainer>
 
       {isEmptyOrder ?
         (
-          <p className="empty">Nenhum pedido adicionado</p>
+          <>
+            <p className="empty">O seu carrinho está vazio.</p>
+            <a href="/">
+              <ActionButton>
+                <ShoppingCart size={16} weight="fill" />
+                CONTINUAR COMPRANDO
+              </ActionButton>
+            </a>
+          </>
         ) : (
           <>
             {orders.map(order => {
-              PRODUCTS.find(item => {
-                item.id === order.id
-                return <ItemFromOrderContainer
-                  key={item.id}
-                >
-                  <div className="content">
-                    <img src={item.imageUrl} alt="" />
-                    <div className="item">
-                      <p>{item.name}</p>
-                      <div className="buttons">
-                        <ProductCounter />
-                        <IconTextButton />
+              const product = allProducts.find(item => item.id === order.id);
+              if (product) {
+                totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;
+                return (
+                  <React.Fragment key={product.id}>
+                    <ItemFromOrderContainer>
+                      <div className="content">
+                        <img src={product.imageUrl} alt="" />
+                        <div className="item">
+                          <p>{product.name}</p>
+                          <div className="buttons">
+                            <ProductCounter
+                              productId={order.id}
+                              numberOfItems={order.quantity}
+                            />
+                            <TrashButtonContainer
+                              onClick={() => handleDeleteItem(product.id)}
+                            >
+                              <span><Trash size={16} /></span>
+                              REMOVER
+                            </TrashButtonContainer>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <span className="price">{
-                    (order.quantity * item.price).toLocaleString('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL'
-                    })}</span>
-                </ItemFromOrderContainer>
-              })
-            })}
-
-            {!isEmptyOrder && (<Divider />)}
-
+                      <span className="price">{formatCoinToBrazil(order.quantity * product.price)}</span>
+                    </ItemFromOrderContainer>
+                    <Divider />
+                  </React.Fragment>);
+              }
+            })
+            }
             <PricesInfoContainer>
               <div className="orderInfo">
                 Total de itens
-                <p>R$ 29,70</p>
+                <p>{formatCoinToBrazil(totalValueOfItems)}</p>
               </div>
               <div className="orderInfo">
                 Entrega
-                <p>R$ 3,50</p>
+                <p>{formatCoinToBrazil(delivery)}</p>
               </div>
               <div className="total">
                 Total
-                <p>R$ 33,20</p>
+                <p>{formatCoinToBrazil(totalValueOfItems + delivery)}</p>
               </div>
             </PricesInfoContainer>
 
-            <ConfirmButton>
+            <ActionButton>
               CONFIRMAR PEDIDO
-            </ConfirmButton>
+            </ActionButton>
           </>
         )
       }
 
-    </ProductsSelectedContainer>
+    </ProductsSelectedContainer >
   );
 }

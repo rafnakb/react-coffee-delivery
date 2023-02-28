@@ -1,7 +1,9 @@
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import { useContext, useState } from "react";
-import { NavLink } from "react-router-dom";
 import { OrderContext, OrdersData } from "../../../../../contexts/OrderContext";
+import * as zod from 'zod';
+import { useForm } from "react-hook-form";
+
 import {
   BuyContainer,
   CartButton,
@@ -23,25 +25,26 @@ interface ProductProps {
 export function ProductCard({ ...props }: ProductProps) {
   const {
     orders,
-    addItemToOrder
+    addItemToOrder,
   } = useContext(OrderContext);
 
   const [quantityOfProduct, setQuantityOfProduct] = useState(1);
 
-  function handleRemoveItemQuantity() {
-    setQuantityOfProduct((state) => {
-      if (state < 2) {
-        return 1;
-      } else {
-        return state - 1;
-      }
-    })
-  }
-
-  function handleAddItemQuantity() {
-    setQuantityOfProduct((state) => {
-      return state + 1;
-    })
+  function handleIncreaseDecreaseQuantity(addOrRemove: string) {
+    if (addOrRemove === 'add') {
+      setQuantityOfProduct((state) => {
+        return state + 1;
+      })
+    }
+    if (addOrRemove === 'remove') {
+      setQuantityOfProduct((state) => {
+        if (state < 2) {
+          return 1;
+        } else {
+          return state - 1;
+        }
+      })
+    }
   }
 
   function handleAddItemToOrder() {
@@ -73,15 +76,17 @@ export function ProductCard({ ...props }: ProductProps) {
         <div>
           <OrderCountContainer>
             <button
-              onClick={handleRemoveItemQuantity}
+              // onClick={handleRemoveItemQuantity}
               title="Remover item"
+              onClick={() => handleIncreaseDecreaseQuantity('remove')}
             >
               <Minus size={14} weight="bold" />
             </button>
             <span>{quantityOfProduct}</span>
             <button
-              onClick={handleAddItemQuantity}
+              // onClick={handleAddItemQuantity}
               title="Adicionar item"
+              onClick={() => handleIncreaseDecreaseQuantity('add')}
             >
               <Plus size={14} weight="bold" />
             </button>
