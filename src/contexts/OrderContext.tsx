@@ -1,24 +1,39 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import { useForm } from "react-hook-form";
 
+export interface CreateNewOrderData {
+  id: string;
+  items: OrderItems[];
+  address?: Address[];
+  payment?: number; // (1: cartão de crédito; 2: cartão débito; 3: dinheiro)
+}
+
+export interface OrderItems {
+  id: number;
+  quantity: number;
+}
+
+export interface Address {
+  cep: string;
+  rua: string;
+  numero: string;
+  complemento: string;
+  bairro: string;
+  cidade: string;
+  uf: string;
+}
+
 export interface OrdersData {
   id: number;
   quantity: number;
-  address: [
-    {
-      cep: string;
-      rua: string;
-      numero: string;
-      complemento: string;
-      bairro: string;
-      cidade: string;
-      uf: string;
-    }
-  ];
-  payment: number; // (1: cartão de crédito; 2: cartão débito; 3: dinheiro)
+}
+
+export interface Cart {
+  id: number;
+  quantity: number;
 }
 
 interface OrderContextType {
@@ -27,10 +42,13 @@ interface OrderContextType {
   filterList: FilterModel[];
   filteredProducts: ProductModel[];
   orders: OrdersData[];
+  cart: Cart[];
   addItemToOrder: (list: OrdersData[]) => void;
+  addItemToCart: (items: Cart[]) => void;
   numberOfItemsInOrder: number;
   increaseDecreaseQuantity: (id: number, addOrRemove: string) => void;
   deleteItemFromOrder: (id: number) => void;
+  setPaymentMethod: (paymentId: number) => void;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -42,7 +60,24 @@ interface OrderContextProviderProps {
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const allProducts = PRODUCTS;
   const [orders, setOrders] = useState<OrdersData[]>([]);
+  const [cart, setCart] = useState<OrdersData[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>(allProducts);
+  const [payment, setPayment] = useState(0);
+  const [order, setOrder] = useState<CreateNewOrderData>();
+
+  function addItemToCart(items: Cart[]) {
+    const mergedItems = items.reduce((sumItems: Cart[], currencyItem) => {
+      const existingItem = sumItems.find((item) => item.id === currencyItem.id);
+      if (existingItem) {
+        existingItem.quantity = existingItem.quantity + currencyItem.quantity
+      } else {
+        sumItems.push(currencyItem);
+      }
+      return sumItems;
+    }, []);
+
+    setCart(mergedItems);
+  }
 
   function addItemToOrder(list: OrdersData[]) {
     const mergedOrders = list.reduce((sumOrders: OrdersData[], currencyOrders) => {
@@ -79,6 +114,10 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }
   }
 
+  function setPaymentMethod(paymentId: number) {
+    //const updatePaymento = orders.find(order => order.id === )
+  }
+
   function deleteItemFromOrder(id: number) {
     const updateOrderList = orders.filter(item => {
       return item.id !== id;
@@ -86,15 +125,13 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     setOrders(updateOrderList);
   }
 
-
-  function countNumberOfItemsInOrder() {
+  function countNumberOfItemsInOrder() { // useEffet aqui!?
     let total = 0;
     orders.map(order => {
       return total = total + order.quantity;
     })
     return total;
   }
-
   const numberOfItemsInOrder = countNumberOfItemsInOrder();
 
   let allTags: string[] = [];
@@ -144,10 +181,13 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         filterList,
         filteredProducts,
         orders,
+        cart,
         addItemToOrder,
+        addItemToCart,
         numberOfItemsInOrder,
         increaseDecreaseQuantity,
-        deleteItemFromOrder
+        deleteItemFromOrder,
+        setPaymentMethod
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import { useContext, useState } from "react";
-import { OrderContext, OrdersData } from "../../../../../contexts/OrderContext";
+import { Cart, CreateNewOrderData, OrderContext, OrdersData } from "../../../../../contexts/OrderContext";
 import * as zod from 'zod';
 import { useForm } from "react-hook-form";
 
@@ -25,7 +25,10 @@ interface ProductProps {
 export function ProductCard({ ...props }: ProductProps) {
   const {
     orders,
-    addItemToOrder,
+    cart,
+    addItemToCart,
+    filterList,
+    addItemToOrder
   } = useContext(OrderContext);
 
   const [quantityOfProduct, setQuantityOfProduct] = useState(1);
@@ -53,6 +56,14 @@ export function ProductCard({ ...props }: ProductProps) {
       quantity: quantityOfProduct
     }
     addItemToOrder([...orders, newItem]);
+  }
+
+  function handleAddItemToCart() {
+    const newItem: Cart = {
+      id: props.id,
+      quantity: quantityOfProduct
+    }
+    addItemToCart([...cart, newItem]);
   }
 
   return (
@@ -91,7 +102,7 @@ export function ProductCard({ ...props }: ProductProps) {
               <Plus size={14} weight="bold" />
             </button>
           </OrderCountContainer>
-          <CartButton title="Adicionar ao carrinho" onClick={handleAddItemToOrder}>
+          <CartButton title="Adicionar ao carrinho" onClick={handleAddItemToCart}>
             <ShoppingCartSimple size={22} weight="fill" />
           </CartButton>
         </div>

@@ -6,6 +6,21 @@ import {
 } from "./styles";
 
 export function Checkout() {
+/*
+  function handleCreateOrder() {
+    const id = String(new Date().getTime());
+    const newOrder: CreateNewOrderData = {
+      id,
+      items: [
+        {
+          id: props.id,
+          quantity: quantityOfProduct
+        }
+      ]
+    }
+    createNewOrder(newOrder);
+  }
+*/
   return (
     <CheckoutContainer>
       <span>Complete seu pedido</span>

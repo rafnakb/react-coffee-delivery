@@ -4,6 +4,7 @@ import { PaymentButton } from "./components/PaymentButton";
 import { PaymentContainer } from "./styles";
 
 export function Payment() {
+
   return (
     <PaymentContainer>
       <HeaderTitle
