@@ -6,6 +6,7 @@
 
 ## 1.2 useEffect
 - Ação de efeito colateral
+- Por padrão, essa função é executada após a renderização inicial e após cada atualização do componente.
 ```js
 useEffect(() => {
   /* Qual função será executada? */

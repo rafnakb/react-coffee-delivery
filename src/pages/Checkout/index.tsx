@@ -4,23 +4,11 @@ import { CheckoutProducts } from "./components/CheckoutProducts";
 import {
   CheckoutContainer,
 } from "./styles";
+import { useContext, useEffect } from "react";
+import { OrderContext } from "../../contexts/OrderContext";
 
 export function Checkout() {
-/*
-  function handleCreateOrder() {
-    const id = String(new Date().getTime());
-    const newOrder: CreateNewOrderData = {
-      id,
-      items: [
-        {
-          id: props.id,
-          quantity: quantityOfProduct
-        }
-      ]
-    }
-    createNewOrder(newOrder);
-  }
-*/
+
   return (
     <CheckoutContainer>
       <span>Complete seu pedido</span>

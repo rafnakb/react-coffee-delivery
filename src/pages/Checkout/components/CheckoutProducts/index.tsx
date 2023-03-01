@@ -1,6 +1,6 @@
 import { ProductCounter } from "../../../../components/ProductCounter";
 import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, CheckoutProductsContainer, TrashButtonContainer } from "./styles";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
@@ -9,7 +9,8 @@ export function CheckoutProducts() {
   const {
     allProducts,
     cart,
-    deleteItemFromCart
+    deleteItemFromCart,
+    orderIsValid
   } = useContext(OrderContext);
 
   const isEmptyOrder = cart.length === 0;
@@ -84,7 +85,8 @@ export function CheckoutProducts() {
               </div>
             </PricesInfoContainer>
 
-            <ActionButton disabled={true}>
+            {/* disabled={!isValid || Object.keys(errors).length > 0} */}
+            <ActionButton disabled={!orderIsValid}>
               CONFIRMAR PEDIDO
             </ActionButton>
           </>

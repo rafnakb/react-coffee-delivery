@@ -1,6 +1,6 @@
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import { useContext, useState } from "react";
-import { Cart, CreateNewOrderData, OrderContext } from "../../../../../contexts/OrderContext";
+import { Cart, OrderData, OrderContext } from "../../../../../contexts/OrderContext";
 
 import {
   BuyContainer,

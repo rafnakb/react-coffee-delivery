@@ -1,23 +1,24 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useReducer, useState } from "react";
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { PRODUCTS } from "../api-data/app-data";
+import { postToLocalStorage } from "./crud-local";
 
-export interface CreateNewOrderData {
+export interface OrderData {
   id: string;
-  items: OrderItems[];
-  address: Address[];
+  items: Cart[];
+  address: DeliveryAddress;
   payment: number; // (1: cartão de crédito; 2: cartão débito; 3: dinheiro)
 }
 
-export interface OrderItems {
+export interface Items {
   id: number;
   quantity: number;
 }
 
-export interface Address {
+export interface DeliveryAddress {
   cep: string;
   rua: string;
   numero: string;
@@ -42,6 +43,9 @@ interface OrderContextType {
   countNumberOfItemsInOrder: () => number;
   increaseDecreaseQuantity: (id: number, addOrRemove: string) => void;
   deleteItemFromCart: (id: number) => void;
+  order: OrderData;
+  orderIsValid: boolean;
+  fillDeliveryAddress: (data: DeliveryAddress) => void;
   setPaymentMethod: (paymentId: number) => void;
 }
 
@@ -56,32 +60,31 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>(allProducts);
   const [filterList, setFilterList] = useState<FilterModel[]>([]);
   const [cart, setCart] = useState<Cart[]>([]);
-  const [payment, setPayment] = useState(0);
-  const [order, setOrder] = useState<CreateNewOrderData | null>(null);
-
-  useEffect(() => {
-    countNumberOfItemsInOrder();
-  }, [cart])
+  const [order, setOrder] = useState<OrderData>({
+    id: '',
+    items: [],
+    address: {} as DeliveryAddress,
+    payment: 0
+  });
+  const [orderIsValid, setOrderIsValid] = useState<boolean>(false);
 
   useEffect(() => {
     loadAllFilters();
+    if (localStorage.getItem('orderData') !== null) {
+      localStorage.removeItem('orderData');
+    }
   }, [])
 
-  useEffect(() => {
-    // orderIsValid();
-  }, [cart])
-
-  function orderIsValid() {
-    if (order === null) {
-      return
-    }
-    for (let value in order) {
-      if (value === undefined || value === null || value === '') {
-        return false;
+  function validateOrder() {
+    for (const [key, value] of Object.entries(order)) {
+      if (key !== 'id' && value !== null && value !== undefined && value === '' && value.length === 0) {
+        return setOrderIsValid(true);
       }
     }
-    return true;
+    return setOrderIsValid(false);
   }
+
+  // function addItemsToOrder(items: )
 
   function addItemToCart(items: Cart[]) {
     const mergedItems = items.reduce((sumItems: Cart[], currencyItem) => {
@@ -93,8 +96,14 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       }
       return sumItems;
     }, []);
-
     setCart(mergedItems);
+
+    order.items = mergedItems;
+    setOrder(state => {
+      return state;
+    })
+
+    postToLocalStorage(order);
   }
 
   function increaseDecreaseQuantity(id: number, addOrRemove: string) {
@@ -106,6 +115,11 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         return item;
       });
       setCart(updateOrderList);
+
+      order.items = updateOrderList;
+      setOrder(state => {
+        return state;
+      })
     }
     if (addOrRemove === 'remove') {
       const updateOrderList = cart.map(item => {
@@ -115,11 +129,28 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         return item;
       });
       setCart(updateOrderList);
+
+      order.items = updateOrderList;
+      setOrder(state => {
+        return state;
+      })
     }
+
+    postToLocalStorage(order);
+  }
+
+  function fillDeliveryAddress(data: DeliveryAddress) {
+    order.address = data;
+    setOrder(state => {
+      return state;
+    })
   }
 
   function setPaymentMethod(paymentId: number) {
-    //const updatePaymento = orders.find(order => order.id === )
+    order.payment = paymentId;
+    setOrder(state => {
+      return state;
+    })
   }
 
   function deleteItemFromCart(id: number) {
@@ -127,6 +158,11 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       return item.id !== id;
     });
     setCart(updateOrderList);
+
+    setOrder(state => {
+      return state;
+    })
+    postToLocalStorage(order);
   }
 
   function countNumberOfItemsInOrder() {
@@ -189,7 +225,10 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         countNumberOfItemsInOrder,
         increaseDecreaseQuantity,
         deleteItemFromCart,
-        setPaymentMethod
+        order,
+        orderIsValid,
+        fillDeliveryAddress,
+        setPaymentMethod,
       }}
     >
       {children}

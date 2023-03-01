@@ -4,21 +4,25 @@ import { AddressContainer, Column, FormContainer, Input } from "./styles";
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { OrderContext } from "../../../../contexts/OrderContext";
 
 const addressFormValidationSchema = zod.object({
   cep: zod.string().min(1),
   rua: zod.string().min(1),
   numero: zod.string().min(1),
-  complemento: zod.string().min(1),
+  complemento: zod.string(),
   bairro: zod.string().min(1),
   cidade: zod.string().min(1),
-  uf: zod.string().min(1)
+  uf: zod.string().min(2)
 });
 
 type NewAddressFormData = zod.infer<typeof addressFormValidationSchema>;
 
 export function Address() {
+  const {
+    fillDeliveryAddress
+  } = useContext(OrderContext);
 
   const addressForm = useForm<NewAddressFormData>({
     resolver: zodResolver(addressFormValidationSchema),
@@ -36,8 +40,12 @@ export function Address() {
 
   const { register, handleSubmit, formState: { errors, isValid } } = addressForm;
 
-  function handleCreateNewOrder(data: any) {
+  useEffect(() => {
+    handleSubmit(handleDeliveryAddressFilled)();
+  }, [isValid])
 
+  function handleDeliveryAddressFilled(data: NewAddressFormData) {
+    fillDeliveryAddress(data);
   }
 
   return (
@@ -48,7 +56,7 @@ export function Address() {
         title={'Endereço de Entrega'}
         subtitle={'Informe o endereço onde deseja receber seu pedido'}
       />
-      <FormContainer onSubmit={handleSubmit(handleCreateNewOrder)}>
+      <FormContainer>
         <div>
           <Column numGrid={39}>
             <Input type="text" placeholder="CEP" {...register('cep')} />
@@ -64,7 +72,7 @@ export function Address() {
             <Input type="text" placeholder="Número" {...register('numero')} />
           </Column>
           <Column numGrid={60}>
-            <Input type="text" placeholder="Complemento" {...register('complemento')} />
+            <Input type="text" placeholder="Complemento (opcional)" {...register('complemento')} />
           </Column>
         </div>
         <div>
