@@ -1,6 +1,6 @@
 import { Address } from "./components/Address";
 import { Payment } from "./components/Payment";
-import { Products } from "./components/ProductSelected";
+import { CheckoutProducts } from "./components/CheckoutProducts";
 import {
   CheckoutContainer,
 } from "./styles";
@@ -29,7 +29,7 @@ export function Checkout() {
         <Address />
         <Payment />
       </div>
-      <Products />
+      <CheckoutProducts />
     </CheckoutContainer>
   );
 }

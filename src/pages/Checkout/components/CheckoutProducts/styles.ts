@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ProductsSelectedContainer = styled.div`
+export const CheckoutProductsContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2.5rem;
@@ -143,6 +143,11 @@ export const ActionButton = styled.button`
 
   &:hover {
     background: ${props => props.theme['yellow-700']};
+  }
+
+  &:disabled{
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 `;
 

@@ -1,28 +1,28 @@
 import { ProductCounter } from "../../../../components/ProductCounter";
-import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, ProductsSelectedContainer, TrashButtonContainer } from "./styles";
+import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, CheckoutProductsContainer, TrashButtonContainer } from "./styles";
 import React, { useContext } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
 
-export function Products() {
+export function CheckoutProducts() {
   const {
     allProducts,
-    orders,
-    deleteItemFromOrder
+    cart,
+    deleteItemFromCart
   } = useContext(OrderContext);
 
-  const isEmptyOrder = orders.length === 0;
+  const isEmptyOrder = cart.length === 0;
 
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
 
   function handleDeleteItem(id: number) {
-    deleteItemFromOrder(id)
+    deleteItemFromCart(id)
   }
 
   return (
-    <ProductsSelectedContainer>
+    <CheckoutProductsContainer>
 
       {isEmptyOrder ?
         (
@@ -37,7 +37,7 @@ export function Products() {
           </>
         ) : (
           <>
-            {orders.map(order => {
+            {cart.map(order => {
               const product = allProducts.find(item => item.id === order.id);
               if (product) {
                 totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;
@@ -84,13 +84,13 @@ export function Products() {
               </div>
             </PricesInfoContainer>
 
-            <ActionButton>
+            <ActionButton disabled={true}>
               CONFIRMAR PEDIDO
             </ActionButton>
           </>
         )
       }
 
-    </ProductsSelectedContainer >
+    </CheckoutProductsContainer >
   );
 }

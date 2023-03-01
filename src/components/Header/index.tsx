@@ -1,15 +1,17 @@
 import { ShoppingCart, MapPin } from "phosphor-react";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { OrderContext, OrdersData } from "../../contexts/OrderContext";
+import { OrderContext } from "../../contexts/OrderContext";
 import { CartItemCounter, HeaderContainer } from "./styles";
 
 export function Header() {
   const {
-    numberOfItemsInOrder
+    countNumberOfItemsInOrder
   } = useContext(OrderContext);
 
-  const isEmptyCart = numberOfItemsInOrder === 0;
+  let numberOfItensInOrder = countNumberOfItemsInOrder();
+
+  const isEmptyCart = numberOfItensInOrder === 0;
 
   return (
     <HeaderContainer>
@@ -27,7 +29,7 @@ export function Header() {
           </NavLink>
           {!isEmptyCart && (
             <CartItemCounter>
-              {numberOfItemsInOrder}
+              {numberOfItensInOrder}
             </CartItemCounter>
           )}
         </nav>

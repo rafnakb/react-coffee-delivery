@@ -1,5 +1,5 @@
 import { Coffee } from "phosphor-react";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { ProductCard } from "./ProductCard";
 import { TagBox, ProductsContainer, ProductsGrid, EmptyList } from "./styles";

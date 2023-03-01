@@ -1,8 +1,6 @@
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import { useContext, useState } from "react";
-import { Cart, CreateNewOrderData, OrderContext, OrdersData } from "../../../../../contexts/OrderContext";
-import * as zod from 'zod';
-import { useForm } from "react-hook-form";
+import { Cart, CreateNewOrderData, OrderContext } from "../../../../../contexts/OrderContext";
 
 import {
   BuyContainer,
@@ -24,11 +22,9 @@ interface ProductProps {
 
 export function ProductCard({ ...props }: ProductProps) {
   const {
-    orders,
     cart,
     addItemToCart,
     filterList,
-    addItemToOrder
   } = useContext(OrderContext);
 
   const [quantityOfProduct, setQuantityOfProduct] = useState(1);
@@ -48,14 +44,6 @@ export function ProductCard({ ...props }: ProductProps) {
         }
       })
     }
-  }
-
-  function handleAddItemToOrder() {
-    const newItem: OrdersData = {
-      id: props.id,
-      quantity: quantityOfProduct
-    }
-    addItemToOrder([...orders, newItem]);
   }
 
   function handleAddItemToCart() {
