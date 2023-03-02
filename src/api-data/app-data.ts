@@ -1,3 +1,9 @@
+export const PAYMENTS = [
+  {id: 1, method: 'Cartão de Crédito'},
+  {id: 2, method: 'Cartão de Débito'},
+  {id: 3, method: 'Dinheiro'}
+]
+
 export const PRODUCTS = [
   {
     id: 1,

@@ -23,6 +23,7 @@ interface ProductProps {
 export function ProductCard({ ...props }: ProductProps) {
   const {
     order,
+    cart,
     addItemsToOrder,
   } = useContext(OrderContext);
 
@@ -50,7 +51,7 @@ export function ProductCard({ ...props }: ProductProps) {
       id: props.id,
       quantity: quantityOfProduct
     }
-    addItemsToOrder([...order.items, newItem]);
+    addItemsToOrder([...cart, newItem]);
   }
 
   return (

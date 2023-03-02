@@ -33,4 +33,21 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 400;
     font-size: 1rem;
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active {
+      box-shadow: 1px ${props => props.theme['yellow-700']};
+      -webkit-box-shadow: 0 0 0 30px ${props => props.theme['gray-400']} inset !important;
+      border: 1px solid transparent !important;
+      &:focus {
+        border: 1px solid ${props => props.theme['yellow-700']};
+      }
+  }
+
+  input:-webkit-autofill{
+    -webkit-text-fill-color: ${props => props.theme['gray-700']} !important;
+  }
+
 `;

@@ -21,7 +21,8 @@ type NewAddressFormData = zod.infer<typeof addressFormValidationSchema>;
 
 export function Address() {
   const {
-    fillDeliveryAddress
+    fillDeliveryAddress,
+    address
   } = useContext(OrderContext);
 
   const addressForm = useForm<NewAddressFormData>({
@@ -45,7 +46,7 @@ export function Address() {
   }, [isValid])
 
   function handleDeliveryAddressFilled(data: NewAddressFormData) {
-    fillDeliveryAddress(data);
+    fillDeliveryAddress(data, isValid);
   }
 
   return (
@@ -86,7 +87,6 @@ export function Address() {
             <Input type="text" placeholder="UF" {...register('uf')} />
           </Column>
         </div>
-        {/* <button type="submit" disabled={!isValid || Object.keys(errors).length > 0}>Confirmar</button> */}
       </FormContainer>
     </AddressContainer>
   );

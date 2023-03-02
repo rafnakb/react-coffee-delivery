@@ -4,16 +4,17 @@ import React, { useContext, useEffect } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
+import { NavLink } from "react-router-dom";
 
 export function CheckoutProducts() {
   const {
     allProducts,
-    order,
+    cart,
     deleteItemFromCart,
     orderIsValid
   } = useContext(OrderContext);
 
-  const isEmptyOrder = order.items.length === 0;
+  const isEmptyOrder = cart.length === 0;
 
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
@@ -38,7 +39,7 @@ export function CheckoutProducts() {
           </>
         ) : (
           <>
-            {order.items.map(order => {
+            {cart.map(order => {
               const product = allProducts.find(item => item.id === order.id);
               if (product) {
                 totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;
@@ -85,9 +86,11 @@ export function CheckoutProducts() {
               </div>
             </PricesInfoContainer>
 
-            <ActionButton disabled={!orderIsValid}>
-              CONFIRMAR PEDIDO
-            </ActionButton>
+            <NavLink to="/order-confirmation">
+              <ActionButton disabled={!orderIsValid}>
+                CONFIRMAR PEDIDO
+              </ActionButton>
+            </NavLink>
           </>
         )
       }

@@ -1,7 +1,12 @@
 import { createContext, ReactNode, useEffect, useReducer, useState } from "react";
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { PRODUCTS } from "../api-data/app-data";
-import { postToLocalStorage } from "./crud-local";
+import { deleteToLocalStorage, postToLocalStorage } from "./crud-local";
+
+export interface Orders {
+  id: string;
+  orderList: OrderData[];
+}
 
 export interface OrderData {
   id: string;
@@ -37,9 +42,10 @@ interface OrderContextType {
   deleteItemFromCart: (id: number) => void;
   order: OrderData;
   orderIsValid: boolean;
-  fillDeliveryAddress: (data: DeliveryAddress) => void;
+  fillDeliveryAddress: (data: DeliveryAddress, addressIsValid: boolean) => void;
   setPaymentMethod: (paymentId: number) => void;
   payment: number;
+  address: boolean;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -59,20 +65,33 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [filteredProducts, setFilteredProducts] = useState<ProductModel[]>(allProducts);
   const [filterList, setFilterList] = useState<FilterModel[]>([]);
   const [cart, setCart] = useState<Product[]>([]);
-  const [orderIsValid, setOrderIsValid] = useState<boolean>(false);
   const [payment, setPayment] = useState<number>(0);
+  const [address, setAddress] = useState<boolean>(false);
+  const [orderIsValid, setOrderIsValid] = useState<boolean>(false);
 
   useEffect(() => {
     loadAllFilters();
   }, [])
 
-  console.log(order)
+  useEffect(() => {
+    validateOrder();
+  }, [cart, payment, address])
+
+  function validateOrder() {
+    if (cart.length >= 0 && payment !== 0 && address === true) {
+      setOrderIsValid(true);
+    } else {
+      setOrderIsValid(false);
+    }
+  }
 
   function addItemsToOrder(items: Product[]) {
     const updateItems = mergeOrderItems(items);
     order.items = updateItems;
     setOrder(state => { return state });
     setCart(updateItems);
+
+    postToLocalStorage(order);
   }
 
   function mergeOrderItems(items: Product[]) {
@@ -90,7 +109,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   function increaseDecreaseQuantity(id: number, addOrRemove: string) {
     if (addOrRemove === 'add') {
-      const updateItems = order.items.map(item => {
+      const updateItems = cart.map(item => {
         if (item.id === id) {
           return { ...item, quantity: item.quantity += 1 }
         }
@@ -99,9 +118,11 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       order.items = updateItems;
       setOrder(state => { return state; });
       setCart(updateItems);
+
+      postToLocalStorage(order);
     }
     if (addOrRemove === 'remove') {
-      const updateItems = order.items.map(item => {
+      const updateItems = cart.map(item => {
         if ((item.id === id) && (item.quantity > 1)) {
           return { ...item, quantity: item.quantity -= 1 }
         }
@@ -110,6 +131,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       order.items = updateItems;
       setOrder(state => { return state; });
       setCart(updateItems);
+
+      postToLocalStorage(order);
     }
   }
 
@@ -118,39 +141,40 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     return total;
   }
 
-  function fillDeliveryAddress(data: DeliveryAddress) {
+  function fillDeliveryAddress(data: DeliveryAddress, addressIsValid: boolean) {
+    if (addressIsValid === true) {
+      setAddress(true);
+    }
     order.address = data;
     setOrder(state => { return state; })
+
+    postToLocalStorage(order);
   }
 
   function setPaymentMethod(paymentId: number) {
-    if (order.payment === paymentId) {
-      order.payment = 0;
-      setOrder(state => { return state; })
-      setPayment(order.payment);
-      return;
-    }
+    // if (order.payment === paymentId) {
+    //   setPayment(() => 0);
+    //   order.payment = payment;
+    //   console.log(payment)
+    //   setOrder(state => { return state; })
+    //   return;
+    // }
     order.payment = paymentId;
     setOrder(state => { return state; })
-    setPayment(order.payment);
+    setPayment(paymentId);
+
+    postToLocalStorage(order);
   }
 
   function deleteItemFromCart(id: number) {
-    console.log(id)
-    const updateItems = order.items.filter(item => {
+    const updateItems = cart.filter(item => {
       return item.id !== id;
     });
+    order.items = updateItems;
     setOrder(state => { return state });
     setCart(updateItems);
-  }
 
-  function validateOrder() {
-    for (const [key, value] of Object.entries(order)) {
-      if (key !== 'id' && value !== null && value !== undefined && value === '' && value.length === 0) {
-        return setOrderIsValid(true);
-      }
-    }
-    return setOrderIsValid(false);
+    postToLocalStorage(order);
   }
 
   function loadAllFilters() {
@@ -196,11 +220,6 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }
   }
 
-  // useEffect(() => {
-  //   console.log('Validando pedido!')
-  //   validateOrder();
-  // }, [order])
-
   return (
     <OrderContext.Provider
       value={{
@@ -217,7 +236,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         orderIsValid,
         fillDeliveryAddress,
         setPaymentMethod,
-        payment
+        payment,
+        address,
       }}
     >
       {children}

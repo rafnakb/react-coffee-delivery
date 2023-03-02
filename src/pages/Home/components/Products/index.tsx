@@ -2,7 +2,7 @@ import { Coffee } from "phosphor-react";
 import { useContext } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { ProductCard } from "./ProductCard";
-import { TagBox, ProductsContainer, ProductsGrid, EmptyList } from "./styles";
+import { TagBox, ProductsContainer, ProductsGrid, EmptyList, TitleAndFilters } from "./styles";
 
 export interface ProductModel {
   id: number;
@@ -29,26 +29,31 @@ export function Products() {
 
   return (
     <ProductsContainer>
-      <header>
-        <p>Nossos cafés</p>
-        <div>
+      <TitleAndFilters>
+        <h1>Nossos cafés</h1>
+        <div className="tagsContainer">
           {filterList.map(tag => {
-            return <TagBox
-              key={tag.tag}
-              isSelected={tag.isSelected}
-              onClick={() => handleFilteredProductTable(tag.tag)}
-            >
-              {tag.tag}
-            </TagBox>
+            return (
+              <TagBox
+                className="tagBox"
+                key={tag.tag}
+                isSelected={tag.isSelected}
+                onClick={() => handleFilteredProductTable(tag.tag)}
+              >
+                {tag.tag}
+              </TagBox>
+            )
           })}
         </div>
-      </header>
+      </TitleAndFilters>
+
       {isProductListEmpty && (
         <EmptyList>
           <Coffee size={54} weight="fill" />
           Nenhum produto encontrado
         </EmptyList>
       )}
+
       <ProductsGrid>
         {filteredProducts.map((product: ProductModel) => {
           return <ProductCard
@@ -62,6 +67,7 @@ export function Products() {
           />
         })}
       </ProductsGrid>
+
     </ProductsContainer>
   );
 }

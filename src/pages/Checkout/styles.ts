@@ -6,7 +6,7 @@ export const CheckoutContainer = styled.div`
   margin: 0 auto;
   grid-template-columns: 40rem 1fr;
   gap: 0.75rem 2rem;
-  padding-top: 2.5rem;
+  padding-top: 5rem;
   align-items: flex-start;
 
   font-family: 'Baloo 2';

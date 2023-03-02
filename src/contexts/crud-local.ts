@@ -13,3 +13,7 @@ export function putToLocalStorage(data: OrderData) {
   data.items;
   localStorage.setItem('orderData', JSON.stringify(data));
 }
+
+export function deleteToLocalStorage() {
+  localStorage.removeItem('orderData');
+}
