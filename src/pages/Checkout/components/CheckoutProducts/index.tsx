@@ -8,12 +8,12 @@ import { formatCoinToBrazil } from "../../../../utils/text-formatter";
 export function CheckoutProducts() {
   const {
     allProducts,
-    cart,
+    order,
     deleteItemFromCart,
     orderIsValid
   } = useContext(OrderContext);
 
-  const isEmptyOrder = cart.length === 0;
+  const isEmptyOrder = order.items.length === 0;
 
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
@@ -38,7 +38,7 @@ export function CheckoutProducts() {
           </>
         ) : (
           <>
-            {cart.map(order => {
+            {order.items.map(order => {
               const product = allProducts.find(item => item.id === order.id);
               if (product) {
                 totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;
@@ -85,7 +85,6 @@ export function CheckoutProducts() {
               </div>
             </PricesInfoContainer>
 
-            {/* disabled={!isValid || Object.keys(errors).length > 0} */}
             <ActionButton disabled={!orderIsValid}>
               CONFIRMAR PEDIDO
             </ActionButton>

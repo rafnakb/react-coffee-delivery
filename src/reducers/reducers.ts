@@ -1,7 +1,5 @@
-interface OrderState {
+import { OrderData } from "../contexts/OrderContext";
 
-}
-
-export function orderReducer(state: OrderState, action: any){
-  
+export function orderReducer(state: OrderData, action: any){
+  return state;
 }

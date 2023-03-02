@@ -7,35 +7,33 @@ import { IconContainer, PaymentButtonContainer, PaymentContainer } from "./style
 export function Payment() {
   const {
     order,
-    setPaymentMethod
+    setPaymentMethod,
+    payment
   } = useContext(OrderContext)
-
-  const [payment, setPayment] = useState<boolean>(false);
 
   let creditButton = false;
   let debitButton = false;
   let money = false;
 
-  function loadPaymentButtons() {
-    if (order.payment === 1) {
-      creditButton = true;
-      debitButton = false;
-      money = false;
-    }
-    if (order.payment === 2) {
-      creditButton = false;
-      debitButton = true;
-      money = false;
-    }
-    if (order.payment === 3) {
-      creditButton = false;
-      debitButton = false;
-      money = true;
-    } else {
-      creditButton = false;
-      debitButton = false;
-      money = false;
-    }
+  if (payment === 0) {
+    creditButton = false;
+    debitButton = false;
+    money = false;
+  }
+  if (payment === 1) {
+    creditButton = true;
+    debitButton = false;
+    money = false;
+  }
+  if (payment === 2) {
+    creditButton = false;
+    debitButton = true;
+    money = false;
+  }
+  if (payment === 3) {
+    creditButton = false;
+    debitButton = false;
+    money = true;
   }
 
   function handleChoosePaymentMethod(paymentId: number) {
