@@ -69,6 +69,22 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [address, setAddress] = useState<boolean>(false);
   const [orderIsValid, setOrderIsValid] = useState<boolean>(false);
 
+  const [orderState, dispatch] = useReducer((state: Product[], action: any) => {
+    console.log(state)
+    console.log(action)
+
+    if (action.type === 'INCREMENT_QUANTITY_OF_PRODUCT') {
+      const updateItems = cart.map(item => {
+        if (action.payload.id === item.id) {
+          return { ...item, quantity: item.quantity += 1 }
+        }
+        return item;
+      });
+      state = updateItems;
+    }
+    return state;
+  }, [])
+
   useEffect(() => {
     loadAllFilters();
   }, [])
@@ -109,6 +125,13 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   function increaseDecreaseQuantity(id: number, addOrRemove: string) {
     if (addOrRemove === 'add') {
+      dispatch({
+        type: 'INCREMENT_QUANTITY_OF_PRODUCT',
+        payload: {
+          id,
+          addOrRemove
+        }
+      })
       const updateItems = cart.map(item => {
         if (item.id === id) {
           return { ...item, quantity: item.quantity += 1 }
