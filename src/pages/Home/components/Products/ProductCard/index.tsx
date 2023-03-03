@@ -1,6 +1,6 @@
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import { useContext, useState } from "react";
-import { Product, OrderData, OrderContext } from "../../../../../contexts/OrderContext";
+import { Product, OrderContext } from "../../../../../contexts/OrderContext";
 
 import {
   BuyContainer,
@@ -24,6 +24,7 @@ export function ProductCard({ ...props }: ProductProps) {
   const {
     order,
     cart,
+    orderState,
     addItemsToOrder,
   } = useContext(OrderContext);
 
@@ -51,7 +52,7 @@ export function ProductCard({ ...props }: ProductProps) {
       id: props.id,
       quantity: quantityOfProduct
     }
-    addItemsToOrder([...cart, newItem]);
+    addItemsToOrder(newItem);
   }
 
   return (

@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { DefaultLayout } from "./layouts/DefaultLayout";
+import { ReducerExample } from "./pages/abc";
 import { Checkout } from "./pages/Checkout";
 import { Home } from "./pages/Home";
 import { OrderConfirmation } from "./pages/OrderConfirmation";
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '/order-confirmation',
         element: <OrderConfirmation />
+      },
+      {
+        path: '/reducer',
+        element: <ReducerExample />
       }
     ]
   }
