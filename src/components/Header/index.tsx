@@ -7,16 +7,11 @@ import { CartItemCounter, HeaderContainer } from "./styles";
 export function Header() {
   const {
     orderState,
-    countNumberOfItemsInOrder
   } = useContext(OrderContext);
 
-  let numberOfItensInOrder = countNumberOfItemsInOrder();
+  let totalOfItems = orderState.items.reduce((a, b) => a + b.quantity, 0);
 
-  // console.log(orderState)
-
-  // let totalOfItems = orderState.items.reduce((a, b) => a + b.quantity, 0);
-
-  const isEmptyCart = numberOfItensInOrder === 0;
+  const isEmptyCart = totalOfItems === 0;
 
   return (
     <HeaderContainer>
@@ -34,7 +29,7 @@ export function Header() {
           </NavLink>
           {!isEmptyCart && (
             <CartItemCounter>
-              {numberOfItensInOrder}
+              {totalOfItems}
             </CartItemCounter>
           )}
         </nav>

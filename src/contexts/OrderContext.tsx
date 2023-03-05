@@ -25,15 +25,14 @@ export interface Product {
 }
 
 interface OrderContextType {
+  allProducts: ProductModel[],
   productsState: ProductModel[],
   handleFilteredProductTable: (filteredTag: string) => void;
   filterList: FilterModel[];
   cart: Product[];
   addItemsToOrder: (item: Product) => void;
-  countNumberOfItemsInOrder: () => number;
-  increaseDecreaseQuantity: (id: number, addOrRemove: string) => void;
-  deleteItemFromCart: (id: number) => void;
-  order: OrderData;
+  increaseDecreaseQuantity: (productId: number, addOrRemove: string) => void;
+  removeItemFromCart: (productId: number) => void;
   orderState: OrderData;
   orderIsValid: boolean;
   fillDeliveryAddress: (data: DeliveryAddress, addressIsValid: boolean) => void;
@@ -49,10 +48,14 @@ interface OrderContextProviderProps {
 }
 
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
-  const [productsState, productsDispatch] = useReducer(productsReducers, PRODUCTS)
-  const [orderState, orderDispatch] = useReducer(orderReducer, {} as OrderData)
-
-  const [order, setOrder] = useState<OrderData>({} as OrderData);
+  const allProducts = PRODUCTS;
+  const [productsState, productsDispatch] = useReducer(productsReducers, allProducts)
+  const [orderState, orderDispatch] = useReducer(orderReducer, {
+    id: '',
+    items: [],
+    address: {} as DeliveryAddress,
+    payment: 0
+  } as OrderData)
   const [filterList, setFilterList] = useState<FilterModel[]>([]);
   const [cart, setCart] = useState<Product[]>([]);
   const [payment, setPayment] = useState<number>(0);
@@ -65,7 +68,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   useEffect(() => {
     validateOrder();
-  }, [cart, payment, address])
+  }, [productsState])
 
   function addItemsToOrder(item: Product) {
     orderDispatch({
@@ -76,42 +79,40 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     })
   }
 
-  function increaseDecreaseQuantity(id: number, addOrRemove: string) {
+  function increaseDecreaseQuantity(productId: number, addOrRemove: string) {
     if (addOrRemove === 'add') {
-      const updateItems = cart.map(item => {
-        if (item.id === id) {
-          return { ...item, quantity: item.quantity += 1 }
+      orderDispatch({
+        type: 'INCREMENT_QUANTITY_OF_PRODUCT',
+        payload: {
+          id: productId
         }
-        return item;
-      });
-      order.items = updateItems;
-      setOrder(state => { return state; });
-      setCart(updateItems);
+      })
     }
     if (addOrRemove === 'remove') {
-      const updateItems = cart.map(item => {
-        if ((item.id === id) && (item.quantity > 1)) {
-          return { ...item, quantity: item.quantity -= 1 }
+      orderDispatch({
+        type: 'DECREMENT_QUANTITY_OF_PRODUCT',
+        payload: {
+          id: productId
         }
-        return item;
-      });
-      order.items = updateItems;
-      setOrder(state => { return state; });
-      setCart(updateItems);
+      })
     }
   }
 
-  function countNumberOfItemsInOrder() {
-    let total = cart.reduce((a, b) => a + b.quantity, 0);
-    return total;
+  function removeItemFromCart(productId: number) {
+    orderDispatch({
+      type: 'REMOVE_PRODUCTS_TO_ORDER',
+      payload: {
+        id: productId
+      }
+    })
   }
 
   function fillDeliveryAddress(data: DeliveryAddress, addressIsValid: boolean) {
-    if (addressIsValid === true) {
-      setAddress(true);
-    }
-    order.address = data;
-    setOrder(state => { return state; })
+    // if (addressIsValid === true) {
+    //   setAddress(true);
+    // }
+    // order.address = data;
+    // setOrder(state => { return state; })
   }
 
   function setPaymentMethod(paymentId: number) {
@@ -122,18 +123,9 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     //   setOrder(state => { return state; })
     //   return;
     // }
-    order.payment = paymentId;
-    setOrder(state => { return state; })
-    setPayment(paymentId);
-  }
-
-  function deleteItemFromCart(id: number) {
-    const updateItems = cart.filter(item => {
-      return item.id !== id;
-    });
-    order.items = updateItems;
-    setOrder(state => { return state });
-    setCart(updateItems);
+    // order.payment = paymentId;
+    // setOrder(state => { return state; })
+    // setPayment(paymentId);
   }
 
   function validateOrder() {
@@ -206,15 +198,14 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   return (
     <OrderContext.Provider
       value={{
+        allProducts,
         productsState,
         handleFilteredProductTable,
         filterList,
         cart,
         addItemsToOrder,
-        countNumberOfItemsInOrder,
         increaseDecreaseQuantity,
-        deleteItemFromCart,
-        order,
+        removeItemFromCart,
         orderState,
         orderIsValid,
         fillDeliveryAddress,

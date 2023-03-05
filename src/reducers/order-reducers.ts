@@ -11,34 +11,36 @@ export interface OrderData {
 export function orderReducer(state: OrderData, action: any) {
   switch (action.type) {
     case 'ADD_PRODUCTS_TO_ORDER': {
-
-      // Função que mescla o novo item à lista existente e soma as quantidades
-      // Encontra o índice do item com o mesmo ID na lista
       const index = state.items.findIndex((item) => item.id === action.payload.item.id);
 
       if (index === -1) {
-        const updatedOrder = [...state.items, action.payload.item];
-        return; state
+        return { ...state, items: [...state.items, action.payload.item] }
       } else {
-        const updatedOrder = state.items.map((item) =>
-          item.id === action.payload.item.id ? { ...item, quantity: item.quantity + action.payload.item.quantity } : item
-        );
-        return state;
+        const mergedItems = state.items.map((item) => item.id === action.payload.item.id ?
+          { ...item, quantity: item.quantity + action.payload.item.quantity } : item)
+        return { ...state, items: mergedItems }
       }
-      // const updatedOrder = { ...state, items: action.payload.items }
     }
     case 'INCREMENT_QUANTITY_OF_PRODUCT': {
-
-      return state;
+      const listWithIncrementedItems = state.items.map((item) => item.id === action.payload.id ?
+        { ...item, quantity: item.quantity + 1 } : item)
+      return { ...state, items: listWithIncrementedItems }
     }
     case 'DECREMENT_QUANTITY_OF_PRODUCT': {
-
-      return state;
+      const listWithDecrmentedItems = state.items.map((item) => item.id === action.payload.id ?
+        { ...item, quantity: item.quantity - 1 } : item)
+      return { ...state, items: listWithDecrmentedItems }
+    }
+    case 'REMOVE_PRODUCTS_TO_ORDER': {
+      const listWithRemovedProduct = state.items.filter((item) => {
+        return item.id !== action.payload.id;
+      })
+      return { ...state, items: listWithRemovedProduct }
     }
     default:
       return state;
   }
-} // Em TS, mesclar objeto a uma lista de objetos existentes e somar valores do arumento?
+}
 
 /* 
   Local Storage CRUD
@@ -75,32 +77,4 @@ const itemList: Item[] = [
   { id: 2, name: 'Item 2', quantity: 10 },
   { id: 3, name: 'Item 3', quantity: 2 },
 ];
-
-// Novo item a ser adicionado à lista
-const newItem: Item = { id: 2, name: 'Item 4', quantity: 3 };
-
-// Função que mescla o novo item à lista existente e soma as quantidades
-function mergeItemToList(list: Item[], newItem: Item): Item[] {
-  // Encontra o índice do item com o mesmo ID na lista
-  const index = list.findIndex((item) => item.id === newItem.id);
-
-  if (index === -1) {
-    // Caso o item não exista na lista, simplesmente adiciona o novo item
-    return [...list, newItem];
-  } else {
-    // Caso contrário, mescla o novo item ao item existente, somando as quantidades
-    return list.map((item) =>
-      item.id === newItem.id ? { ...item, quantity: item.quantity + newItem.quantity } : item
-    );
-  }
-}
-
-// Testa a função com o novo item
-const mergedList = mergeItemToList(itemList, newItem);
-console.log(mergedList);
-// Saída: [
-//   { id: 1, name: 'Item 1', quantity: 5 },
-//   { id: 2, name: 'Item 2', quantity: 13 },
-//   { id: 3, name: 'Item 3', quantity: 2 },
-// ]
 

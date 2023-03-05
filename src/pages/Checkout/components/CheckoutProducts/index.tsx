@@ -9,18 +9,18 @@ import { NavLink } from "react-router-dom";
 export function CheckoutProducts() {
   const {
     allProducts,
-    cart,
-    deleteItemFromCart,
+    orderState,
+    removeItemFromCart,
     orderIsValid
   } = useContext(OrderContext);
 
-  const isEmptyOrder = cart.length === 0;
+  const isEmptyOrder = orderState.items.length === 0;
 
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
 
-  function handleDeleteItem(id: number) {
-    deleteItemFromCart(id)
+  function handleRemoveItem(productId: number) {
+    removeItemFromCart(productId)
   }
 
   return (
@@ -39,7 +39,7 @@ export function CheckoutProducts() {
           </>
         ) : (
           <>
-            {cart.map(order => {
+            {orderState.items.map(order => {
               const product = allProducts.find(item => item.id === order.id);
               if (product) {
                 totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;
@@ -56,7 +56,7 @@ export function CheckoutProducts() {
                               numberOfItems={order.quantity}
                             />
                             <TrashButtonContainer
-                              onClick={() => handleDeleteItem(product.id)}
+                              onClick={() => handleRemoveItem(product.id)}
                             >
                               <span><Trash size={16} /></span>
                               REMOVER
