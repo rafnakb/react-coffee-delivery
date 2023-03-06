@@ -8,6 +8,14 @@ import { useContext, useEffect } from "react";
 import { OrderContext } from "../../contexts/OrderContext";
 
 export function Checkout() {
+  const {
+    orderState,
+    validateOrder
+  } = useContext(OrderContext);
+
+  useEffect(() => {
+    validateOrder();
+  }, [orderState])
 
   return (
     <CheckoutContainer>

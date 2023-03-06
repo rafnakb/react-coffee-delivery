@@ -15,7 +15,6 @@ const addressFormValidationSchema = zod.object({
   bairro: zod.string().min(1),
   cidade: zod.string().min(1),
   uf: zod.string().min(2),
-  addressIsValid: zod.boolean()
 });
 
 type NewAddressFormData = zod.infer<typeof addressFormValidationSchema>;
@@ -35,20 +34,23 @@ export function Address() {
       bairro: '',
       cidade: '',
       uf: '',
-      addressIsValid: false
     },
     mode: 'onChange'
   })
 
-  const { register, handleSubmit, formState: { errors, isValid } } = addressForm;
+  const { register, handleSubmit, formState, formState: { errors, isValid } } = addressForm;
 
   useEffect(() => {
-    handleSubmit(handleDeliveryAddressFilled)();
+    if (isValid === false) {
+      handleDeliveryAddressFilled({} as NewAddressFormData);
+      return;
+    } else {
+      handleSubmit(handleDeliveryAddressFilled)();
+    }
   }, [isValid])
 
-  function handleDeliveryAddressFilled(data: NewAddressFormData) {
-    const addressData = { ...data, addressIsValid: isValid }
-    updateOrderAddress(addressData);
+  function handleDeliveryAddressFilled(address: NewAddressFormData) {
+    updateOrderAddress(address);
   }
 
   return (

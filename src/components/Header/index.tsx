@@ -1,4 +1,4 @@
-import { ShoppingCart, MapPin } from "phosphor-react";
+import { ShoppingCart, MapPin, ListBullets } from "phosphor-react";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { OrderContext } from "../../contexts/OrderContext";
@@ -24,6 +24,9 @@ export function Header() {
             <MapPin size={20} weight="fill" />
             <p>Cedral, SP</p>
           </span>
+          <NavLink to="/orders-list" title="Lista de pedidos">
+            <ListBullets size={20} />
+          </NavLink>
           <NavLink to="/checkout" title="Carrinho de compras">
             <ShoppingCart size={20} weight="fill" />
           </NavLink>

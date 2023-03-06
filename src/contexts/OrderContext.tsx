@@ -4,11 +4,6 @@ import { PRODUCTS } from "../api-data/app-data";
 import { productsReducers } from "../reducers/products-reducers";
 import { OrderData, orderReducer } from "../reducers/order-reducers";
 
-export interface Orders {
-  id: string;
-  orderList: OrderData[];
-}
-
 export interface Address {
   cep: string;
   rua: string;
@@ -17,7 +12,6 @@ export interface Address {
   bairro: string;
   cidade: string;
   uf: string;
-  addressIsValid: boolean;
 }
 
 export interface Product {
@@ -37,6 +31,8 @@ interface OrderContextType {
   orderIsValid: boolean;
   updateOrderAddress: (addressData: Address) => void;
   setPaymentMethod: (paymentId: number) => void;
+  validateOrder: () => void;
+  confirmOrder: () => string;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -130,13 +126,18 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   function validateOrder() {
     if (orderState.items.length > 0 &&
       orderState.payment > 0 &&
-      orderState.address.addressIsValid === true) {
-      console.log('Valido: ' + orderIsValid)
+      Object.entries(orderState.address).length > 0) {
       setOrderIsValid(() => true);
     } else {
-      console.log('Valido: ' + orderIsValid)
       setOrderIsValid(() => false);
     }
+  }
+
+  function confirmOrder() {
+    orderDispatch({
+      type: 'CONFIRM_ORDER'
+    })
+    return orderState.id;
   }
 
   function loadAllFilters() {
@@ -204,6 +205,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         orderIsValid,
         updateOrderAddress,
         setPaymentMethod,
+        validateOrder,
+        confirmOrder
       }}
     >
       {children}

@@ -56,7 +56,16 @@ export function orderReducer(state: OrderData, action: any) {
       return { ...state, payment: action.payload.paymentId };
     }
     case 'CONFIRM_ORDER': {
-
+      const orderId = String(new Date().getTime());
+      const updateState = { ...state, id: orderId };
+      postOrderToListOfOrders({ ...state, id: orderId });
+      // const resetState = {
+      //   id: '',
+      //   items: [],
+      //   address: {} as Address,
+      //   payment: 0
+      // }
+      return updateState;
     }
     default:
       return state;
@@ -80,21 +89,21 @@ export function postOrder(data: OrderData) {
   localStorage.setItem('coffeeDeliveyOrderData', JSON.stringify(data));
 }
 
-export function putToLocalStorage(data: OrderData) {
-  let objString: string | null = localStorage.getItem('coffeeDeliveyOrderData');
-  let oldOrder: OrderData = {} as OrderData;
-  if (objString !== null) {
-    oldOrder = JSON.parse(objString);
-  }
-  data.items;
-  localStorage.setItem('coffeeDeliveyOrderData', JSON.stringify(data));
-}
-
 export function deleteOrder() {
   localStorage.removeItem('coffeeDeliveyOrderData');
 }
 
-export function postOrderToListOfOrders(data: OrderData) {
-  localStorage.setItem('coffeeDeliveyListOfOrder', JSON.stringify(data));
+export function postOrderToListOfOrders(newOrder: OrderData) {
+  const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
+  const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
+  orderList.push(newOrder);
+  localStorage.setItem('coffeeDeliveyOrderList', JSON.stringify(orderList));
+}
+
+export function getOrderById(orderId: string) {
+  const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
+  const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
+  const orderById = orderList.find(order => order.id === orderId)
+  return orderById;
 }
 

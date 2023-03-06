@@ -1,17 +1,21 @@
 import { CurrencyDollar, MapPin, Timer } from "phosphor-react";
-import { useContext } from "react";
+import { useParams } from "react-router-dom";
 import { PAYMENTS } from "../../api-data/app-data";
-import { Address, OrderContext } from "../../contexts/OrderContext";
+import { getOrderById, OrderData } from "../../reducers/order-reducers";
 import { Icon, IconTitleContainer, OrderConfirmationContainer, OrderInfoCard } from "./styles";
 
+import motorcycle from '../../assets/man-motorcycle.svg';
+
 export function OrderConfirmation() {
-  const {
-    order
-  } = useContext(OrderContext);
+  const { orderId } = useParams();
 
-  const hasComplemento = order.address.complemento.length === 0;
+  let orderData: OrderData = getOrderById((orderId as string))!;
 
-  const paymentMethod = PAYMENTS.find(pay => pay.id === order.payment);
+  console.log(orderData)
+
+  const hasComplemento = orderData.address.complemento.length === 0;
+
+  const paymentMethod = PAYMENTS.find(pay => pay.id === orderData.payment);
 
   return (
     <OrderConfirmationContainer>
@@ -25,13 +29,13 @@ export function OrderConfirmation() {
             </Icon>
             <div className="infoText">
               Entrega em <strong>
-                {order.address.rua + ', ' + order.address.numero}
-                {!hasComplemento && (', ' + order.address.complemento)}
+                {orderData.address.rua + ', ' + orderData.address.numero}
+                {!hasComplemento && (', ' + orderData.address.complemento)}
               </strong>
               <p>{
-                order.address.bairro + ' - '
-                + order.address.cidade + ', '
-                + order.address.uf
+                orderData.address.bairro + ' - '
+                + orderData.address.cidade + ', '
+                + orderData.address.uf
               }</p>
             </div>
           </IconTitleContainer>
@@ -58,7 +62,7 @@ export function OrderConfirmation() {
             </div>
           </IconTitleContainer>
         </OrderInfoCard>
-        <img src="src/assets/man-motorcycle.svg" alt="" />
+        <img src={motorcycle} alt="" />
       </div>
     </OrderConfirmationContainer>
   );

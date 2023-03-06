@@ -4,6 +4,7 @@ import { ReducerExample } from "./pages/abc";
 import { Checkout } from "./pages/Checkout";
 import { Home } from "./pages/Home";
 import { OrderConfirmation } from "./pages/OrderConfirmation";
+import { OrderList } from "./pages/OrderList";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +20,16 @@ const router = createBrowserRouter([
         element: <Checkout />
       },
       {
-        path: '/order-confirmation',
+        path: '/order-confirmation/:orderId',
         element: <OrderConfirmation />
       },
       {
         path: '/reducer',
         element: <ReducerExample />
+      },
+      {
+        path: '/orders-list',
+        element: <OrderList />
       }
     ]
   }

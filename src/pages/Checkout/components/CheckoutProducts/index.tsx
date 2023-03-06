@@ -4,15 +4,17 @@ import React, { useContext, useEffect } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export function CheckoutProducts() {
   const {
     allProducts,
     orderState,
     removeItemFromCart,
-    orderIsValid
+    orderIsValid,
+    confirmOrder
   } = useContext(OrderContext);
+  const navigate = useNavigate();
 
   const isEmptyOrder = orderState.items.length === 0;
 
@@ -21,6 +23,11 @@ export function CheckoutProducts() {
 
   function handleRemoveItem(productId: number) {
     removeItemFromCart(productId)
+  }
+
+  function handleConfirmOrder() {
+    let orderId = confirmOrder();
+    navigate(`/order-confirmation/${orderId}`);
   }
 
   return (
@@ -86,11 +93,9 @@ export function CheckoutProducts() {
               </div>
             </PricesInfoContainer>
 
-            <NavLink to="/order-confirmation">
-              <ActionButton disabled={!orderIsValid}>
-                CONFIRMAR PEDIDO
-              </ActionButton>
-            </NavLink>
+            <ActionButton disabled={!orderIsValid} onClick={handleConfirmOrder}>
+              CONFIRMAR PEDIDO
+            </ActionButton>
           </>
         )
       }
