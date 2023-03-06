@@ -1,43 +1,46 @@
 import { Bank, CreditCard, CurrencyDollar, Money } from "phosphor-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 import { HeaderTitle } from "../HeaderTitle";
 import { IconContainer, PaymentButtonContainer, PaymentContainer } from "./styles";
 
 export function Payment() {
   const {
-    order,
+    orderState,
     setPaymentMethod,
-    payment
   } = useContext(OrderContext)
 
   let creditButton = false;
   let debitButton = false;
   let money = false;
 
-  if (payment === 0) {
+  if (orderState.payment === 0) {
     creditButton = false;
     debitButton = false;
     money = false;
   }
-  if (payment === 1) {
+  if (orderState.payment === 1) {
     creditButton = true;
     debitButton = false;
     money = false;
   }
-  if (payment === 2) {
+  if (orderState.payment === 2) {
     creditButton = false;
     debitButton = true;
     money = false;
   }
-  if (payment === 3) {
+  if (orderState.payment === 3) {
     creditButton = false;
     debitButton = false;
     money = true;
   }
 
   function handleChoosePaymentMethod(paymentId: number) {
-    setPaymentMethod(paymentId);
+    if (paymentId == orderState.payment) {
+      setPaymentMethod(0);
+    } else {
+      setPaymentMethod(paymentId);
+    }
   }
 
   return (

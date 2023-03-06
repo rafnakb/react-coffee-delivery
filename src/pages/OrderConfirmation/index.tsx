@@ -1,7 +1,7 @@
 import { CurrencyDollar, MapPin, Timer } from "phosphor-react";
 import { useContext } from "react";
 import { PAYMENTS } from "../../api-data/app-data";
-import { DeliveryAddress, OrderContext } from "../../contexts/OrderContext";
+import { Address, OrderContext } from "../../contexts/OrderContext";
 import { Icon, IconTitleContainer, OrderConfirmationContainer, OrderInfoCard } from "./styles";
 
 export function OrderConfirmation() {

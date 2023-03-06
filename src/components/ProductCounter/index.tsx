@@ -14,7 +14,11 @@ export function ProductCounter({ productId, numberOfItems }: ProductCounterProps
   } = useContext(OrderContext);
 
   function handleIncreaseDecreaseQuantity(addOrRemove: string) {
-    increaseDecreaseQuantity(productId, addOrRemove)
+    if (addOrRemove === 'remove' && numberOfItems < 2) {
+      return;
+    } else {
+      increaseDecreaseQuantity(productId, addOrRemove)
+    }
   }
 
   return (

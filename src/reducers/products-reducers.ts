@@ -1,5 +1,3 @@
-import { OrderData, Product } from "../contexts/OrderContext";
-
 export interface ProductsData {
   id: number,
   tags: string[],

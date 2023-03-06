@@ -4,7 +4,7 @@ import { AddressContainer, Column, FormContainer, Input } from "./styles";
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import { useForm } from "react-hook-form";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { OrderContext } from "../../../../contexts/OrderContext";
 
 const addressFormValidationSchema = zod.object({
@@ -14,15 +14,15 @@ const addressFormValidationSchema = zod.object({
   complemento: zod.string(),
   bairro: zod.string().min(1),
   cidade: zod.string().min(1),
-  uf: zod.string().min(2)
+  uf: zod.string().min(2),
+  addressIsValid: zod.boolean()
 });
 
 type NewAddressFormData = zod.infer<typeof addressFormValidationSchema>;
 
 export function Address() {
   const {
-    fillDeliveryAddress,
-    address
+    updateOrderAddress,
   } = useContext(OrderContext);
 
   const addressForm = useForm<NewAddressFormData>({
@@ -34,7 +34,8 @@ export function Address() {
       complemento: '',
       bairro: '',
       cidade: '',
-      uf: ''
+      uf: '',
+      addressIsValid: false
     },
     mode: 'onChange'
   })
@@ -46,7 +47,8 @@ export function Address() {
   }, [isValid])
 
   function handleDeliveryAddressFilled(data: NewAddressFormData) {
-    fillDeliveryAddress(data, isValid);
+    const addressData = { ...data, addressIsValid: isValid }
+    updateOrderAddress(addressData);
   }
 
   return (
@@ -60,31 +62,59 @@ export function Address() {
       <FormContainer>
         <div>
           <Column numGrid={39}>
-            <Input type="text" placeholder="CEP" {...register('cep')} />
+            <Input
+              type="text"
+              placeholder="CEP"
+              {...register('cep')}
+            />
           </Column>
         </div>
         <div>
           <Column numGrid={100}>
-            <Input type="text" placeholder="Rua" {...register('rua')} />
+            <Input
+              type="text"
+              placeholder="Rua"
+              {...register('rua')}
+            />
           </Column>
         </div>
         <div>
           <Column numGrid={40}>
-            <Input type="text" placeholder="Número" {...register('numero')} />
+            <Input
+              type="text"
+              placeholder="Número"
+              {...register('numero')}
+            />
           </Column>
           <Column numGrid={60}>
-            <Input type="text" placeholder="Complemento (opcional)" {...register('complemento')} />
+            <Input
+              type="text"
+              placeholder="Complemento (opcional)"
+              {...register('complemento')}
+            />
           </Column>
         </div>
         <div>
           <Column numGrid={42}>
-            <Input type="text" placeholder="Bairro" {...register('bairro')} />
+            <Input
+              type="text"
+              placeholder="Bairro"
+              {...register('bairro')}
+            />
           </Column>
           <Column numGrid={40}>
-            <Input type="text" placeholder="Cidade" {...register('cidade')} />
+            <Input
+              type="text"
+              placeholder="Cidade"
+              {...register('cidade')}
+            />
           </Column>
           <Column numGrid={20}>
-            <Input type="text" placeholder="UF" {...register('uf')} />
+            <Input
+              type="text"
+              placeholder="UF"
+              {...register('uf')}
+            />
           </Column>
         </div>
       </FormContainer>
