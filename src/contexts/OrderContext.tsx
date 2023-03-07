@@ -3,6 +3,7 @@ import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { PRODUCTS } from "../api-data/app-data";
 import { productsReducers } from "../reducers/products-reducers";
 import { OrderData, orderReducer } from "../reducers/order-reducers";
+import { useNavigate } from "react-router-dom";
 
 export interface Address {
   cep: string;
@@ -29,10 +30,12 @@ interface OrderContextType {
   removeItemFromCart: (productId: number) => void;
   orderState: OrderData;
   orderIsValid: boolean;
+  loadOpenedOrder: () => OrderData;
   updateOrderAddress: (addressData: Address) => void;
   setPaymentMethod: (paymentId: number) => void;
   validateOrder: () => void;
-  confirmOrder: () => string;
+  confirmOrder: (deliveryPrice: number, totalPrice: number) => string;
+  resetOrder: () => void;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -48,7 +51,9 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     id: '',
     items: [],
     address: {} as Address,
-    payment: 0
+    payment: 0,
+    deliveryPrice: 0,
+    totalPrice: 0,
   } as OrderData)
   const [filterList, setFilterList] = useState<FilterModel[]>([]);
   const [orderIsValid, setOrderIsValid] = useState<boolean>(false);
@@ -75,6 +80,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     orderDispatch({
       type: 'GET_OPEN_ORDER'
     })
+    return orderState;
   }
 
   function increaseDecreaseQuantity(productId: number, addOrRemove: string) {
@@ -133,11 +139,21 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     }
   }
 
-  function confirmOrder() {
+  function confirmOrder(deliveryPrice: number, totalPrice: number) {
     orderDispatch({
-      type: 'CONFIRM_ORDER'
+      type: 'CONFIRM_ORDER',
+      payload: {
+        delivery: deliveryPrice,
+        total: totalPrice
+      }
     })
     return orderState.id;
+  }
+
+  function resetOrder() {
+    orderDispatch({
+      type: 'RESET_ORDER'
+    })
   }
 
   function loadAllFilters() {
@@ -203,10 +219,12 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         removeItemFromCart,
         orderState,
         orderIsValid,
+        loadOpenedOrder,
         updateOrderAddress,
         setPaymentMethod,
         validateOrder,
-        confirmOrder
+        confirmOrder,
+        resetOrder
       }}
     >
       {children}

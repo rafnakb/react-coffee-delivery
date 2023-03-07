@@ -5,13 +5,16 @@ import { getOrderById, OrderData } from "../../reducers/order-reducers";
 import { Icon, IconTitleContainer, OrderConfirmationContainer, OrderInfoCard } from "./styles";
 
 import motorcycle from '../../assets/man-motorcycle.svg';
+import { useContext } from "react";
+import { OrderContext } from "../../contexts/OrderContext";
 
 export function OrderConfirmation() {
+  const {
+    orderState
+  } = useContext(OrderContext)
   const { orderId } = useParams();
 
   let orderData: OrderData = getOrderById((orderId as string))!;
-
-  console.log(orderData)
 
   const hasComplemento = orderData.address.complemento.length === 0;
 

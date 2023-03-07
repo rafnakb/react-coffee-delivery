@@ -1,10 +1,11 @@
 import { ProductCounter } from "../../../../components/ProductCounter";
 import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, CheckoutProductsContainer, TrashButtonContainer } from "./styles";
-import React, { useContext, useEffect } from "react";
-import { OrderContext } from "../../../../contexts/OrderContext";
+import React, { useContext, useEffect, useRef } from "react";
+import { Address, OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getOrder, OrderData } from "../../../../reducers/order-reducers";
 
 export function CheckoutProducts() {
   const {
@@ -12,11 +13,15 @@ export function CheckoutProducts() {
     orderState,
     removeItemFromCart,
     orderIsValid,
-    confirmOrder
+    confirmOrder,
+    resetOrder,
+    loadOpenedOrder
   } = useContext(OrderContext);
   const navigate = useNavigate();
 
-  const isEmptyOrder = orderState.items.length === 0;
+  let orderData: OrderData = loadOpenedOrder();
+
+  const isEmptyOrder = orderData.items.length === 0;
 
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
@@ -26,8 +31,9 @@ export function CheckoutProducts() {
   }
 
   function handleConfirmOrder() {
-    let orderId = confirmOrder();
-    navigate(`/order-confirmation/${orderId}`);
+    confirmOrder(delivery, totalValueOfItems);
+    navigate(`/order-confirmation/${orderState}`);
+    resetOrder();
   }
 
   return (
@@ -46,7 +52,7 @@ export function CheckoutProducts() {
           </>
         ) : (
           <>
-            {orderState.items.map(order => {
+            {orderData.items.map(order => {
               const product = allProducts.find(item => item.id === order.id);
               if (product) {
                 totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;

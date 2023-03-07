@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { OrderContext } from "../../contexts/OrderContext";
 import { CartItemCounter, HeaderContainer } from "./styles";
+import logo from '../../assets/coffee-logo.svg';
 
 export function Header() {
   const {
@@ -17,7 +18,7 @@ export function Header() {
     <HeaderContainer>
       <div className="contentSize">
         <a href="/">
-          <img src="src/assets/coffee-logo.svg" alt="" />
+          <img src={logo} alt="" />
         </a>
         <nav>
           <span>

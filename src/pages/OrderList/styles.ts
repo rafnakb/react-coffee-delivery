@@ -8,7 +8,6 @@ export const OrderListContainer = styled.div`
   padding-top: 2rem;
   width: 800px;
   margin: 0 auto;
-  gap: 1rem;
   
   h1 {
     font-family: 'Roboto';
@@ -17,11 +16,11 @@ export const OrderListContainer = styled.div`
     text-align: center;
   }
 
-`;
-
-export const Divider = styled.hr`
-  width: 100%;
-  border-top: 1px solid ${props => props.theme['gray-400']};
+  p {
+    padding: 0.25rem 0;
+    font-size: 14px;
+    font-style: italic;
+  }
 `;
 
 export const Card = styled.div`
@@ -34,4 +33,87 @@ export const Card = styled.div`
   height: 3rem;
   width: 100%;
   border-radius: 6px;
+`;
+
+export const OrderTable = styled.div`
+  flex: 1;
+  overflow: auto;
+  margin: 2rem 0;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+
+    th {
+      background-color: ${(props) => props.theme['purple-700']};
+      padding: 1rem;
+      text-align: left;
+      color: ${(props) => props.theme['gray-100']};
+      font-size: 0.875rem;
+      
+      &:first-child {
+        border-top-left-radius: 8px;
+        padding-left: 1.5rem;
+      }
+
+      &:last-child {
+        border-top-right-radius: 8px;
+        padding-right: 1.5;
+      }
+    }
+
+    td {
+      border-top: 4px solid ${(props) => props.theme['gray-500']};
+      color: ${props => props.theme['gray-800']};
+      padding: 1rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+
+      &:first-child {
+        width: 50%;
+        padding-left: 1.5rem;
+      }
+
+      &:last-child {
+        padding-right: 1.5;
+      }
+
+      &:hover {
+        background-color: transparent;
+      }
+    }
+
+    tr {
+      background-color: ${(props) => props.theme['gray-300']};
+      cursor: default;
+
+      &:hover {
+        background-color: ${(props) => props.theme['gray-500']};
+      }
+    }
+  }
+`;
+
+export const EmptyContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  color: ${props => props.theme['gray-600']};
+  padding: 2rem 0;
+  
+  span {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 800;
+  }
+
+
+  hr {
+    width: 100%;
+    border-top: 1px solid ${props => props.theme['gray-400']};
+  }
 `;

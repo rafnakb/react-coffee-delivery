@@ -5,6 +5,8 @@ export interface OrderData {
   items: Product[];
   address: Address;
   payment: number; // (1: cartão de crédito; 2: cartão débito; 3: dinheiro)
+  deliveryPrice: number;
+  totalPrice: number;
 }
 
 export function orderReducer(state: OrderData, action: any) {
@@ -57,15 +59,26 @@ export function orderReducer(state: OrderData, action: any) {
     }
     case 'CONFIRM_ORDER': {
       const orderId = String(new Date().getTime());
-      const updateState = { ...state, id: orderId };
-      postOrderToListOfOrders({ ...state, id: orderId });
-      // const resetState = {
-      //   id: '',
-      //   items: [],
-      //   address: {} as Address,
-      //   payment: 0
-      // }
+      const updateState = {
+        ...state,
+        id: orderId,
+        deliveryPrice: action.payload.delivery,
+        totalPrice: action.payload.total,
+      };
+      postOrderToListOrders(updateState);
       return updateState;
+    }
+    case 'RESET_ORDER': {
+      const resetState = {
+        id: '',
+        items: [],
+        address: {} as Address,
+        payment: 0,
+        deliveryPrice: 0,
+        totalPrice: 0,
+      }
+      deleteOrder();
+      return { ...resetState }
     }
     default:
       return state;
@@ -93,7 +106,7 @@ export function deleteOrder() {
   localStorage.removeItem('coffeeDeliveyOrderData');
 }
 
-export function postOrderToListOfOrders(newOrder: OrderData) {
+export function postOrderToListOrders(newOrder: OrderData) {
   const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
   const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
   orderList.push(newOrder);
@@ -105,5 +118,11 @@ export function getOrderById(orderId: string) {
   const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
   const orderById = orderList.find(order => order.id === orderId)
   return orderById;
+}
+
+export function getAllOrder() {
+  const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
+  const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
+  return orderList;
 }
 
