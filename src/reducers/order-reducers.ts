@@ -12,11 +12,11 @@ export interface OrderData {
 export function orderReducer(state: OrderData, action: any) {
   switch (action.type) {
     case 'GET_OPEN_ORDER': {
-      let order = getOrder();
-      if (order !== undefined) {
-        state = order;
+      let storageOrder = getOrder();
+      if (storageOrder === undefined) {
+        return state;
       }
-      return { ...state }
+      return storageOrder;
     }
     case 'ADD_PRODUCTS_TO_ORDER': {
       const index = state.items.findIndex((item) => item.id === action.payload.item.id);
@@ -78,7 +78,7 @@ export function orderReducer(state: OrderData, action: any) {
         totalPrice: 0,
       }
       deleteOrder();
-      return { ...resetState }
+      return resetState;
     }
     default:
       return state;

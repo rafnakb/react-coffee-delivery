@@ -12,6 +12,7 @@ export function OrderConfirmation() {
   const {
     orderState
   } = useContext(OrderContext)
+
   const { orderId } = useParams();
 
   let orderData: OrderData = getOrderById((orderId as string))!;

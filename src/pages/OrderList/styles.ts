@@ -71,7 +71,7 @@ export const OrderTable = styled.div`
       line-height: 1.6;
 
       &:first-child {
-        width: 50%;
+        /* width: 40%; */
         padding-left: 1.5rem;
       }
 

@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useReducer, useState } from "react
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { PRODUCTS } from "../api-data/app-data";
 import { productsReducers } from "../reducers/products-reducers";
-import { OrderData, orderReducer } from "../reducers/order-reducers";
+import { getOrder, OrderData, orderReducer } from "../reducers/order-reducers";
 import { useNavigate } from "react-router-dom";
 
 export interface Address {
@@ -30,12 +30,12 @@ interface OrderContextType {
   removeItemFromCart: (productId: number) => void;
   orderState: OrderData;
   orderIsValid: boolean;
-  loadOpenedOrder: () => OrderData;
   updateOrderAddress: (addressData: Address) => void;
   setPaymentMethod: (paymentId: number) => void;
   validateOrder: () => void;
   confirmOrder: (deliveryPrice: number, totalPrice: number) => string;
   resetOrder: () => void;
+  loadOpenedOrder: () => void;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -47,6 +47,22 @@ interface OrderContextProviderProps {
 export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const allProducts = PRODUCTS;
   const [productsState, productsDispatch] = useReducer(productsReducers, allProducts);
+
+  function initOrder() {
+    const data = getOrder();
+    if (data === undefined) {
+      return {
+        id: '',
+        items: [],
+        address: {} as Address,
+        payment: 0,
+        deliveryPrice: 0,
+        totalPrice: 0,
+      } as OrderData;
+    }
+    return data;
+  }
+
   const [orderState, orderDispatch] = useReducer(orderReducer, {
     id: '',
     items: [],
@@ -54,13 +70,13 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     payment: 0,
     deliveryPrice: 0,
     totalPrice: 0,
-  } as OrderData)
+  } as OrderData, initOrder)
   const [filterList, setFilterList] = useState<FilterModel[]>([]);
   const [orderIsValid, setOrderIsValid] = useState<boolean>(false);
 
   useEffect(() => {
     loadAllFilters();
-    loadOpenedOrder();
+    // loadOpenedOrder();
   }, [])
 
   useEffect(() => {
@@ -80,7 +96,6 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     orderDispatch({
       type: 'GET_OPEN_ORDER'
     })
-    return orderState;
   }
 
   function increaseDecreaseQuantity(productId: number, addOrRemove: string) {
@@ -219,12 +234,12 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         removeItemFromCart,
         orderState,
         orderIsValid,
-        loadOpenedOrder,
         updateOrderAddress,
         setPaymentMethod,
         validateOrder,
         confirmOrder,
-        resetOrder
+        resetOrder,
+        loadOpenedOrder
       }}
     >
       {children}

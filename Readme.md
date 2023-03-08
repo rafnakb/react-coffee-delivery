@@ -15,3 +15,16 @@ useEffect(() => {
   /* Quando? Variáveis a monitorar */
   list
   ])
+```
+
+## 1.3 useReducer
+Diferenças dos retornos
+- return {...state}
+Retorna uma cópia rasa do objeto de estado atual
+
+- return {...state, storageOrder}
+Mantém todas as propriedades existentes do objeto de estado e adiciona uma nova propriedade storageOrder. 
+
+- return storageOrder
+A função reducer substitui completamente o objeto de estado existente pelo valor de storageOrder.
+

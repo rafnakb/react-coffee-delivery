@@ -1,11 +1,12 @@
 import { ProductCounter } from "../../../../components/ProductCounter";
 import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, CheckoutProductsContainer, TrashButtonContainer } from "./styles";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Address, OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
 import { useNavigate } from "react-router-dom";
 import { getOrder, OrderData } from "../../../../reducers/order-reducers";
+import { getOpenOrder } from "../../../../reducers/actions";
 
 export function CheckoutProducts() {
   const {
@@ -15,13 +16,11 @@ export function CheckoutProducts() {
     orderIsValid,
     confirmOrder,
     resetOrder,
-    loadOpenedOrder
   } = useContext(OrderContext);
+  
   const navigate = useNavigate();
 
-  let orderData: OrderData = loadOpenedOrder();
-
-  const isEmptyOrder = orderData.items.length === 0;
+  const isEmptyOrder = orderState.items.length === 0;
 
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
@@ -31,8 +30,9 @@ export function CheckoutProducts() {
   }
 
   function handleConfirmOrder() {
-    confirmOrder(delivery, totalValueOfItems);
-    navigate(`/order-confirmation/${orderState}`);
+    let orderID = confirmOrder(delivery, totalValueOfItems);
+    // orderState.id = orderID;
+    navigate(`/order-confirmation/${orderID}`);
     resetOrder();
   }
 
@@ -52,7 +52,7 @@ export function CheckoutProducts() {
           </>
         ) : (
           <>
-            {orderData.items.map(order => {
+            {orderState.items.map(order => {
               const product = allProducts.find(item => item.id === order.id);
               if (product) {
                 totalValueOfItems = (order.quantity * product.price) + totalValueOfItems;
