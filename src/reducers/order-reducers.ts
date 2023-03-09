@@ -1,4 +1,5 @@
 import { Address, Product } from "../contexts/OrderContext";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface OrderData {
   id: string;
@@ -58,10 +59,9 @@ export function orderReducer(state: OrderData, action: any) {
       return { ...state, payment: action.payload.paymentId };
     }
     case 'CONFIRM_ORDER': {
-      const orderId = String(new Date().getTime());
       const updateState = {
         ...state,
-        id: orderId,
+        id: uuidv4(),
         deliveryPrice: action.payload.delivery,
         totalPrice: action.payload.total,
       };

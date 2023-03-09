@@ -33,9 +33,8 @@ interface OrderContextType {
   updateOrderAddress: (addressData: Address) => void;
   setPaymentMethod: (paymentId: number) => void;
   validateOrder: () => void;
-  confirmOrder: (deliveryPrice: number, totalPrice: number) => string;
+  confirmOrder: (deliveryPrice: number, totalPrice: number) => void;
   resetOrder: () => void;
-  loadOpenedOrder: () => void;
 }
 
 export const OrderContext = createContext({} as OrderContextType);
@@ -49,8 +48,8 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [productsState, productsDispatch] = useReducer(productsReducers, allProducts);
 
   function initOrder() {
-    const data = getOrder();
-    if (data === undefined) {
+    const orderData = getOrder();
+    if (orderData === undefined) {
       return {
         id: '',
         items: [],
@@ -60,7 +59,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         totalPrice: 0,
       } as OrderData;
     }
-    return data;
+    return orderData;
   }
 
   const [orderState, orderDispatch] = useReducer(orderReducer, {
@@ -76,7 +75,6 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   useEffect(() => {
     loadAllFilters();
-    // loadOpenedOrder();
   }, [])
 
   useEffect(() => {
@@ -89,12 +87,6 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       payload: {
         item: item
       }
-    })
-  }
-
-  function loadOpenedOrder() {
-    orderDispatch({
-      type: 'GET_OPEN_ORDER'
     })
   }
 
@@ -162,7 +154,6 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         total: totalPrice
       }
     })
-    return orderState.id;
   }
 
   function resetOrder() {
@@ -239,7 +230,6 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         validateOrder,
         confirmOrder,
         resetOrder,
-        loadOpenedOrder
       }}
     >
       {children}

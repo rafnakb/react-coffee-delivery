@@ -1,12 +1,10 @@
 import { ProductCounter } from "../../../../components/ProductCounter";
 import { ActionButton, Divider, ItemFromOrderContainer, PricesInfoContainer, CheckoutProductsContainer, TrashButtonContainer } from "./styles";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { Address, OrderContext } from "../../../../contexts/OrderContext";
+import React, { useContext, useEffect, useRef } from "react";
+import { OrderContext } from "../../../../contexts/OrderContext";
 import { ShoppingCart, Trash } from "phosphor-react";
 import { formatCoinToBrazil } from "../../../../utils/text-formatter";
 import { useNavigate } from "react-router-dom";
-import { getOrder, OrderData } from "../../../../reducers/order-reducers";
-import { getOpenOrder } from "../../../../reducers/actions";
 
 export function CheckoutProducts() {
   const {
@@ -17,7 +15,6 @@ export function CheckoutProducts() {
     confirmOrder,
     resetOrder,
   } = useContext(OrderContext);
-  
   const navigate = useNavigate();
 
   const isEmptyOrder = orderState.items.length === 0;
@@ -25,15 +22,19 @@ export function CheckoutProducts() {
   let totalValueOfItems: number = 0;
   let delivery: number = 3.5;
 
+  useEffect(() => {
+    if (orderState.id !== "") {
+      navigate(`/order-confirmation/${orderState.id}`);
+      resetOrder();
+    }
+  }, [orderState.id])
+
   function handleRemoveItem(productId: number) {
-    removeItemFromCart(productId)
+    removeItemFromCart(productId);
   }
 
   function handleConfirmOrder() {
-    let orderID = confirmOrder(delivery, totalValueOfItems);
-    // orderState.id = orderID;
-    navigate(`/order-confirmation/${orderID}`);
-    resetOrder();
+    confirmOrder(delivery, totalValueOfItems);
   }
 
   return (
