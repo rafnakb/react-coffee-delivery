@@ -22,8 +22,6 @@ interface ProductProps {
 
 export function ProductCard({ ...props }: ProductProps) {
   const {
-    order,
-    cart,
     orderState,
     addItemsToOrder,
   } = useContext(OrderContext);
