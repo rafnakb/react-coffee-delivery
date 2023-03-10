@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://rafnakb.github.io/react-coffee-delivery",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
