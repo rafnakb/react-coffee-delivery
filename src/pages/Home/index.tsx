@@ -2,15 +2,13 @@ import { Outlet } from "react-router-dom";
 import { Header } from "../../components/Header";
 import { HeroContent } from "./components/Hero";
 import { Products } from "./components/Products";
-import { WideHomeContainer } from "./styles";
+import { HomeContainer } from "./styles";
 
 export function Home() {
   return (
-    <WideHomeContainer>
+    <HomeContainer>
       <HeroContent />
-      <div className="contentSize">
-        <Products />
-      </div>
-    </WideHomeContainer>
+      <Products />
+    </HomeContainer>
   );
 }

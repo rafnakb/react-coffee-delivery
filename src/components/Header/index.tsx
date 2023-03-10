@@ -16,28 +16,26 @@ export function Header() {
 
   return (
     <HeaderContainer>
-      <div className="contentSize">
-        <a href="/">
-          <img src={logo} alt="" />
-        </a>
-        <nav>
-          <span>
-            <MapPin size={20} weight="fill" />
-            <p>Cedral, SP</p>
-          </span>
-          <NavLink to="/orders-list" title="Lista de pedidos">
-            <ListBullets size={20} />
-          </NavLink>
-          <NavLink to="/checkout" title="Carrinho de compras">
-            <ShoppingCart size={20} weight="fill" />
-          </NavLink>
-          {!isEmptyCart && (
-            <CartItemCounter>
-              {totalOfItems}
-            </CartItemCounter>
-          )}
-        </nav>
-      </div>
+      <a href="/">
+        <img src={logo} alt="" />
+      </a>
+      <nav>
+        <span>
+          <MapPin size={20} weight="fill" />
+          <p>Cedral, SP</p>
+        </span>
+        <NavLink to="/orders-list" title="Lista de pedidos">
+          <ListBullets size={20} />
+        </NavLink>
+        <NavLink to="/checkout" title="Carrinho de compras">
+          <ShoppingCart size={20} weight="fill" />
+        </NavLink>
+        {!isEmptyCart && (
+          <CartItemCounter>
+            {totalOfItems}
+          </CartItemCounter>
+        )}
+      </nav>
     </HeaderContainer>
   );
 }

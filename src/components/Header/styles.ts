@@ -3,25 +3,20 @@ import styled from "styled-components";
 export const HeaderContainer = styled.header`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: var(--wideSize);
+  margin: 0 auto;
   background: ${props => props.theme['white-100']};
   z-index: 999px;
   height: 6.5rem;
   position: sticky;
   top: 0;
   z-index: 999;
+  padding: 0 160px;
 
   a {
     display: flex;
     text-decoration: none;
-  }
-
-  .contentSize {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: var(--contentSize);
-    margin: 0 auto;
   }
 
   img {

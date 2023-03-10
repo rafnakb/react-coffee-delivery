@@ -1,9 +1,7 @@
 import styled from "styled-components";
 
 export const ProductsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: var(--contetSize);
 `;
 
 export const TitleAndFilters = styled.div`
@@ -32,9 +30,6 @@ export const TitleAndFilters = styled.div`
 `;
 
 export const ProductsGrid = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 2.5rem 2rem;
