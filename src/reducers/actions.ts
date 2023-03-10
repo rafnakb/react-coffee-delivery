@@ -1,11 +1,13 @@
 import { Export } from "phosphor-react";
+import { Address, Product } from "../contexts/OrderContext";
+import { ProductModel } from "../pages/Home/components/Products";
 
 export enum ActionsTypes {
   /* 
     Products Actions
   */
   GET_ALL_PRODUCTS = 'GET_ALL_PRODUCTS',
-  FILTERED_PRODUCTS = 'FILTERED_PRODUCTS',
+  FILTER_PRODUCTS = 'FILTER_PRODUCTS',
 
   /* 
     Order Actions
@@ -21,55 +23,96 @@ export enum ActionsTypes {
   RESET_ORDER = 'RESET_ORDER',
 }
 
-export function getOpenOrder() {
+export function getAllProductsAction(allProducts: ProductModel[]) {
+  return {
+    type: ActionsTypes.GET_ALL_PRODUCTS,
+    payload: {
+      products: allProducts,
+    }
+  }
+}
+
+export function filterProductsAction(allProducts: ProductModel[], filteredTag: string) {
+  return {
+    type: ActionsTypes.FILTER_PRODUCTS,
+    payload: {
+      products: allProducts,
+      tags: filteredTag,
+    }
+  }
+}
+
+export function getOpenOrderAction() {
   return {
     type: ActionsTypes.GET_OPEN_ORDER,
   }
 }
 
-export function addProductsToOrder() {
+export function addProductsToOrderAction(item: Product) {
   return {
     type: ActionsTypes.ADD_PRODUCTS_TO_ORDER,
+    payload: {
+      item: item
+    }
   }
 }
 
-export function incrementQuantityOfProduct() {
+export function incrementQuantityOfProductAction(productId: number) {
   return {
     type: ActionsTypes.INCREMENT_QUANTITY_OF_PRODUCT,
+    payload: {
+      id: productId
+    }
   }
 }
 
-export function decrementQuantityOfProduct() {
+export function decrementQuantityOfProductAction(productId: number) {
   return {
     type: ActionsTypes.DECREMENT_QUANTITY_OF_PRODUCT,
+    payload: {
+      id: productId
+    }
   }
 }
 
-export function removeProductsToOrder() {
+export function removeProductsToOrderAction(productId: number) {
   return {
     type: ActionsTypes.REMOVE_PRODUCTS_TO_ORDER,
+    payload: {
+      id: productId
+    }
   }
 }
 
-export function updateAddress() {
+export function updateAddressAction(addressData: Address) {
   return {
     type: ActionsTypes.UPDATE_ADDRESS,
+    payload: {
+      address: addressData
+    }
   }
 }
 
-export function updatePayment() {
+export function updatePaymentAction(paymentId: number) {
   return {
     type: ActionsTypes.UPDATE_PAYMENT,
+    payload: {
+      paymentId: paymentId
+    }
   }
 }
 
-export function confirmOrder() {
+export function confirmOrderAction(deliveryPrice: number, totalPrice: number) {
   return {
     type: ActionsTypes.CONFIRM_ORDER,
+    payload: {
+      delivery: deliveryPrice,
+      total: totalPrice
+    }
   }
 }
 
-export function resetOrder() {
+export function resetOrderAction() {
   return {
     type: ActionsTypes.RESET_ORDER,
   }

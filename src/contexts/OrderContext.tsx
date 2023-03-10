@@ -2,8 +2,9 @@ import { createContext, ReactNode, useEffect, useReducer, useState } from "react
 import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { PRODUCTS } from "../api-data/app-data";
 import { productsReducers } from "../reducers/products-reducers";
-import { getOrder, OrderData, orderReducer } from "../reducers/order-reducers";
+import { getOrderFromStorage, OrderData, orderReducer } from "../reducers/order-reducers";
 import { useNavigate } from "react-router-dom";
+import { addProductsToOrderAction, confirmOrderAction, decrementQuantityOfProductAction, filterProductsAction, getAllProductsAction, incrementQuantityOfProductAction, removeProductsToOrderAction, resetOrderAction, updateAddressAction, updatePaymentAction } from "../reducers/actions";
 
 export interface Address {
   cep: string;
@@ -48,7 +49,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [productsState, productsDispatch] = useReducer(productsReducers, allProducts);
 
   function initOrder() {
-    const orderData = getOrder();
+    const orderData = getOrderFromStorage();
     if (orderData === undefined) {
       return {
         id: '',
@@ -81,59 +82,29 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     validateOrder();
   }, [productsState, orderIsValid])
 
-  function addItemsToOrder(item: Product) {
-    orderDispatch({
-      type: 'ADD_PRODUCTS_TO_ORDER',
-      payload: {
-        item: item
-      }
-    })
+  function addProductsToOrder(item: Product) {
+    orderDispatch(addProductsToOrderAction(item));
   }
 
   function increaseDecreaseQuantity(productId: number, addOrRemove: string) {
     if (addOrRemove === 'add') {
-      orderDispatch({
-        type: 'INCREMENT_QUANTITY_OF_PRODUCT',
-        payload: {
-          id: productId
-        }
-      })
+      orderDispatch(incrementQuantityOfProductAction(productId));
     }
     if (addOrRemove === 'remove') {
-      orderDispatch({
-        type: 'DECREMENT_QUANTITY_OF_PRODUCT',
-        payload: {
-          id: productId
-        }
-      })
+      orderDispatch(decrementQuantityOfProductAction(productId));
     }
   }
 
   function removeItemFromCart(productId: number) {
-    orderDispatch({
-      type: 'REMOVE_PRODUCTS_TO_ORDER',
-      payload: {
-        id: productId
-      }
-    })
+    orderDispatch(removeProductsToOrderAction(productId));
   }
 
   function updateOrderAddress(addressData: Address) {
-    orderDispatch({
-      type: 'UPDATE_ADDRESS',
-      payload: {
-        address: addressData
-      }
-    })
+    orderDispatch(updateAddressAction(addressData));
   }
 
   function setPaymentMethod(paymentId: number) {
-    orderDispatch({
-      type: 'UPDATE_PAYMENT',
-      payload: {
-        paymentId: paymentId
-      }
-    })
+    orderDispatch(updatePaymentAction(paymentId));
   }
 
   function validateOrder() {
@@ -147,19 +118,11 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   }
 
   function confirmOrder(deliveryPrice: number, totalPrice: number) {
-    orderDispatch({
-      type: 'CONFIRM_ORDER',
-      payload: {
-        delivery: deliveryPrice,
-        total: totalPrice
-      }
-    })
+    orderDispatch(confirmOrderAction(deliveryPrice, totalPrice))
   }
 
   function resetOrder() {
-    orderDispatch({
-      type: 'RESET_ORDER'
-    })
+    orderDispatch(resetOrderAction());
   }
 
   function loadAllFilters() {
@@ -196,20 +159,9 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     const hasFilter = updateFilterTags.some(tag => tag.isSelected === true);
 
     if (hasFilter === true) {
-      productsDispatch({
-        type: 'FILTERED_PRODUCTS',
-        payload: {
-          products: PRODUCTS,
-          tags: filteredTag,
-        }
-      })
+      productsDispatch(filterProductsAction(allProducts, filteredTag))
     } else {
-      productsDispatch({
-        type: 'GET_ALL_PRODUCTS',
-        payload: {
-          products: PRODUCTS,
-        }
-      })
+      productsDispatch(getAllProductsAction(allProducts))
     }
   }
 
@@ -220,7 +172,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
         productsState,
         handleFilteredProductTable,
         filterList,
-        addItemsToOrder,
+        addItemsToOrder: addProductsToOrder,
         increaseDecreaseQuantity,
         removeItemFromCart,
         orderState,
@@ -235,4 +187,4 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       {children}
     </OrderContext.Provider>
   );
-}
+};

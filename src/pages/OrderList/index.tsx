@@ -2,14 +2,14 @@ import { NoteBlank } from "phosphor-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrderContext } from "../../contexts/OrderContext";
-import { getAllOrder } from "../../reducers/order-reducers";
+import { getAllOrderFromStorage } from "../../reducers/order-reducers";
 import { formatCoinToBrazil } from "../../utils/text-formatter";
 import { EmptyContainer, OrderListContainer, OrderTable } from "./styles";
 
 export function OrderList() {
   const navigate = useNavigate();
 
-  let orderList = getAllOrder();
+  let orderList = getAllOrderFromStorage();
 
   function handleGetOrderId(orderId: string) {
     navigate(`/order-confirmation/${orderId}`);

@@ -1,7 +1,7 @@
 import { CurrencyDollar, MapPin, Timer } from "phosphor-react";
 import { useParams } from "react-router-dom";
 import { PAYMENTS } from "../../api-data/app-data";
-import { getOrderById, OrderData } from "../../reducers/order-reducers";
+import { getOrderByIdFromStorage, OrderData } from "../../reducers/order-reducers";
 import { Icon, IconTitleContainer, OrderConfirmationContainer, OrderInfoCard } from "./styles";
 
 import motorcycle from '../../assets/man-motorcycle.svg';
@@ -15,7 +15,7 @@ export function OrderConfirmation() {
 
   const { orderId } = useParams();
 
-  let orderData: OrderData = getOrderById((orderId as string))!;
+  let orderData: OrderData = getOrderByIdFromStorage((orderId as string))!;
 
   const hasComplemento = orderData.address.complemento.length === 0;
 

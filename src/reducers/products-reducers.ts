@@ -1,3 +1,5 @@
+import { ActionsTypes } from "./actions";
+
 export interface ProductsData {
   id: number,
   tags: string[],
@@ -9,10 +11,10 @@ export interface ProductsData {
 
 export function productsReducers(state: ProductsData[], action: any) {
   switch (action.type) {
-    case 'GET_ALL_PRODUCTS': {
+    case ActionsTypes.GET_ALL_PRODUCTS: {
       return action.payload.products;
     }
-    case 'FILTERED_PRODUCTS': {
+    case ActionsTypes.FILTER_PRODUCTS: {
       const updateList = action.payload.products.filter((product: any) => {
         return product.tags.some((value: any) => action.payload.tags.includes(value));
       })

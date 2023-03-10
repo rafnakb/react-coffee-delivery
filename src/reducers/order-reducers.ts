@@ -1,5 +1,6 @@
 import { Address, Product } from "../contexts/OrderContext";
 import { v4 as uuidv4 } from 'uuid';
+import { ActionsTypes } from "./actions";
 
 export interface OrderData {
   id: string;
@@ -12,63 +13,63 @@ export interface OrderData {
 
 export function orderReducer(state: OrderData, action: any) {
   switch (action.type) {
-    case 'GET_OPEN_ORDER': {
-      let storageOrder = getOrder();
+    case ActionsTypes.GET_OPEN_ORDER: {
+      let storageOrder = getOrderFromStorage();
       if (storageOrder === undefined) {
         return state;
       }
       return storageOrder;
     }
-    case 'ADD_PRODUCTS_TO_ORDER': {
+    case ActionsTypes.ADD_PRODUCTS_TO_ORDER: {
       const index = state.items.findIndex((item) => item.id === action.payload.item.id);
       if (index === -1) {
-        postOrder({ ...state, items: [...state.items, action.payload.item] });
+        postOrderOnStorage({ ...state, items: [...state.items, action.payload.item] });
         return { ...state, items: [...state.items, action.payload.item] };
       } else {
         const mergedItems = state.items.map((item) => item.id === action.payload.item.id ?
           { ...item, quantity: item.quantity + action.payload.item.quantity } : item)
-        postOrder({ ...state, items: mergedItems });
+        postOrderOnStorage({ ...state, items: mergedItems });
         return { ...state, items: mergedItems };
       }
     }
-    case 'INCREMENT_QUANTITY_OF_PRODUCT': {
+    case ActionsTypes.INCREMENT_QUANTITY_OF_PRODUCT: {
       const listWithIncrementedItems = state.items.map((item) => item.id === action.payload.id ?
         { ...item, quantity: item.quantity + 1 } : item)
-      postOrder({ ...state, items: listWithIncrementedItems });
+      postOrderOnStorage({ ...state, items: listWithIncrementedItems });
       return { ...state, items: listWithIncrementedItems };
     }
-    case 'DECREMENT_QUANTITY_OF_PRODUCT': {
+    case ActionsTypes.DECREMENT_QUANTITY_OF_PRODUCT: {
       const listWithDecrmentedItems = state.items.map((item) => item.id === action.payload.id ?
         { ...item, quantity: item.quantity - 1 } : item)
-      postOrder({ ...state, items: listWithDecrmentedItems });
+      postOrderOnStorage({ ...state, items: listWithDecrmentedItems });
       return { ...state, items: listWithDecrmentedItems };
     }
-    case 'REMOVE_PRODUCTS_TO_ORDER': {
+    case ActionsTypes.REMOVE_PRODUCTS_TO_ORDER: {
       const listWithRemovedProduct = state.items.filter((item) => {
         return item.id !== action.payload.id;
       })
-      postOrder({ ...state, items: listWithRemovedProduct });
+      postOrderOnStorage({ ...state, items: listWithRemovedProduct });
       return { ...state, items: listWithRemovedProduct };
     }
-    case 'UPDATE_ADDRESS': {
-      postOrder({ ...state, address: action.payload.address });
+    case ActionsTypes.UPDATE_ADDRESS: {
+      postOrderOnStorage({ ...state, address: action.payload.address });
       return { ...state, address: action.payload.address };
     }
-    case 'UPDATE_PAYMENT': {
-      postOrder({ ...state, payment: action.payload.paymentId });
+    case ActionsTypes.UPDATE_PAYMENT: {
+      postOrderOnStorage({ ...state, payment: action.payload.paymentId });
       return { ...state, payment: action.payload.paymentId };
     }
-    case 'CONFIRM_ORDER': {
+    case ActionsTypes.CONFIRM_ORDER: {
       const updateState = {
         ...state,
         id: uuidv4(),
         deliveryPrice: action.payload.delivery,
         totalPrice: action.payload.total,
       };
-      postOrderToListOrders(updateState);
+      postOrderToListOrdersStorage(updateState);
       return updateState;
     }
-    case 'RESET_ORDER': {
+    case ActionsTypes.RESET_ORDER: {
       const resetState = {
         id: '',
         items: [],
@@ -77,7 +78,7 @@ export function orderReducer(state: OrderData, action: any) {
         deliveryPrice: 0,
         totalPrice: 0,
       }
-      deleteOrder();
+      deleteOrderFromStorage();
       return resetState;
     }
     default:
@@ -89,7 +90,7 @@ export function orderReducer(state: OrderData, action: any) {
   Local Storage CRUD
 */
 
-export function getOrder() {
+export function getOrderFromStorage() {
   let objString: string | null = localStorage.getItem('coffeeDeliveyOrderData');
   let order: OrderData = {} as OrderData;
   if (objString !== null) {
@@ -98,29 +99,29 @@ export function getOrder() {
   }
 }
 
-export function postOrder(data: OrderData) {
+export function postOrderOnStorage(data: OrderData) {
   localStorage.setItem('coffeeDeliveyOrderData', JSON.stringify(data));
 }
 
-export function deleteOrder() {
+export function deleteOrderFromStorage() {
   localStorage.removeItem('coffeeDeliveyOrderData');
 }
 
-export function postOrderToListOrders(newOrder: OrderData) {
+export function postOrderToListOrdersStorage(newOrder: OrderData) {
   const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
   const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
   orderList.push(newOrder);
   localStorage.setItem('coffeeDeliveyOrderList', JSON.stringify(orderList));
 }
 
-export function getOrderById(orderId: string) {
+export function getOrderByIdFromStorage(orderId: string) {
   const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
   const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
   const orderById = orderList.find(order => order.id === orderId)
   return orderById;
 }
 
-export function getAllOrder() {
+export function getAllOrderFromStorage() {
   const arrString: string | null = localStorage.getItem('coffeeDeliveyOrderList');
   const orderList: OrderData[] = arrString ? JSON.parse(arrString) : [];
   return orderList;
