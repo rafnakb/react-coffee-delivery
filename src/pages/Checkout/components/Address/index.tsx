@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as zod from 'zod';
 import { useForm } from "react-hook-form";
 import { useContext, useEffect } from "react";
-import { OrderContext } from "../../../../contexts/OrderContext";
+import { DeliveryAddress, OrderContext } from "../../../../contexts/OrderContext";
 
 const addressFormValidationSchema = zod.object({
-  cep: zod.string().min(1),
+  cep: zod.string().min(8).max(9),
   rua: zod.string().min(1),
   numero: zod.string().min(1),
   complemento: zod.string(),
@@ -38,7 +38,7 @@ export function Address() {
     mode: 'onChange'
   })
 
-  const { register, handleSubmit, formState, formState: { errors, isValid } } = addressForm;
+  const { register, handleSubmit, setValue, getValues, formState: { errors, isValid } } = addressForm;
 
   useEffect(() => {
     if (isValid === false) {
@@ -51,6 +51,27 @@ export function Address() {
 
   function handleDeliveryAddressFilled(address: NewAddressFormData) {
     updateOrderAddress(address);
+  }
+
+  function handleSearchCep() {
+    const cep = getValues('cep').replace('-', '');
+    if ((/^\d+$/.test(cep) === true) && (cep.length === 8)) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setValue('rua', data.logradouro || '');
+          setValue('complemento', data.complemento || '');
+          setValue('bairro', data.bairro || '');
+          setValue('cidade', data.localidade || '');
+          setValue('uf', data.uf || '');
+        },
+        )
+        .catch((error) => {
+
+        });
+    }
   }
 
   return (
@@ -68,6 +89,7 @@ export function Address() {
               type="text"
               placeholder="CEP"
               {...register('cep')}
+              onBlur={handleSearchCep}
             />
           </Column>
         </div>

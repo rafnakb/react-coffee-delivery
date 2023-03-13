@@ -1,11 +1,11 @@
-import { Address, Product } from "../contexts/OrderContext";
+import { DeliveryAddress, Product } from "../contexts/OrderContext";
 import { v4 as uuidv4 } from 'uuid';
 import { ActionsTypes } from "./actions";
 
 export interface OrderData {
   id: string;
   items: Product[];
-  address: Address;
+  address: DeliveryAddress;
   payment: number; // (1: cartão de crédito; 2: cartão débito; 3: dinheiro)
   deliveryPrice: number;
   totalPrice: number;
@@ -73,7 +73,7 @@ export function orderReducer(state: OrderData, action: any) {
       const resetState = {
         id: '',
         items: [],
-        address: {} as Address,
+        address: {} as DeliveryAddress,
         payment: 0,
         deliveryPrice: 0,
         totalPrice: 0,

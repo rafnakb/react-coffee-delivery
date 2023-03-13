@@ -1,4 +1,3 @@
-import { Address } from "./components/Address";
 import { Payment } from "./components/Payment";
 import { CheckoutProducts } from "./components/CheckoutProducts";
 import {
@@ -6,6 +5,7 @@ import {
 } from "./styles";
 import { useContext, useEffect } from "react";
 import { OrderContext } from "../../contexts/OrderContext";
+import { Address } from "./components/Address";
 
 export function Checkout() {
   const {

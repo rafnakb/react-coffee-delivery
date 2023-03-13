@@ -1,5 +1,5 @@
 import { Export } from "phosphor-react";
-import { Address, Product } from "../contexts/OrderContext";
+import { DeliveryAddress, Product } from "../contexts/OrderContext";
 import { ProductModel } from "../pages/Home/components/Products";
 
 export enum ActionsTypes {
@@ -84,7 +84,7 @@ export function removeProductsToOrderAction(productId: number) {
   }
 }
 
-export function updateAddressAction(addressData: Address) {
+export function updateAddressAction(addressData: DeliveryAddress) {
   return {
     type: ActionsTypes.UPDATE_ADDRESS,
     payload: {

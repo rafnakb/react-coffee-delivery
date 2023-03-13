@@ -6,7 +6,7 @@ import { getOrderFromStorage, OrderData, orderReducer } from "../reducers/order-
 import { useNavigate } from "react-router-dom";
 import { addProductsToOrderAction, confirmOrderAction, decrementQuantityOfProductAction, filterProductsAction, getAllProductsAction, incrementQuantityOfProductAction, removeProductsToOrderAction, resetOrderAction, updateAddressAction, updatePaymentAction } from "../reducers/actions";
 
-export interface Address {
+export interface DeliveryAddress {
   cep: string;
   rua: string;
   numero: string;
@@ -31,7 +31,7 @@ interface OrderContextType {
   removeItemFromCart: (productId: number) => void;
   orderState: OrderData;
   orderIsValid: boolean;
-  updateOrderAddress: (addressData: Address) => void;
+  updateOrderAddress: (addressData: DeliveryAddress) => void;
   setPaymentMethod: (paymentId: number) => void;
   validateOrder: () => void;
   confirmOrder: (deliveryPrice: number, totalPrice: number) => void;
@@ -54,7 +54,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
       return {
         id: '',
         items: [],
-        address: {} as Address,
+        address: {} as DeliveryAddress,
         payment: 0,
         deliveryPrice: 0,
         totalPrice: 0,
@@ -66,7 +66,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
   const [orderState, orderDispatch] = useReducer(orderReducer, {
     id: '',
     items: [],
-    address: {} as Address,
+    address: {} as DeliveryAddress,
     payment: 0,
     deliveryPrice: 0,
     totalPrice: 0,
@@ -99,7 +99,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
     orderDispatch(removeProductsToOrderAction(productId));
   }
 
-  function updateOrderAddress(addressData: Address) {
+  function updateOrderAddress(addressData: DeliveryAddress) {
     orderDispatch(updateAddressAction(addressData));
   }
 
