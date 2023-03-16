@@ -22,7 +22,7 @@ export function Header() {
       <nav>
         <span>
           <MapPin size={20} weight="fill" />
-          <p>Cedral, SP</p>
+          <p>São Paulo, SP</p>
         </span>
         <NavLink to="/orders-list" title="Lista de pedidos">
           <ListBullets size={20} />

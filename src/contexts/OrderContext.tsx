@@ -80,7 +80,7 @@ export function OrderContextProvider({ children }: OrderContextProviderProps) {
 
   useEffect(() => {
     validateOrder();
-  }, [productsState, orderIsValid])
+  }, [productsState, orderIsValid, orderState])
 
   function addProductsToOrder(item: Product) {
     orderDispatch(addProductsToOrderAction(item));
