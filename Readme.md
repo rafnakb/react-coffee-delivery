@@ -1,2 +1,2 @@
 # To Do App
-- Visit the app
+Visit the app, link in description
