@@ -127,3 +127,7 @@ export function getAllOrderFromStorage() {
   return orderList;
 }
 
+export function deleteOrderListFromStorage() {
+  localStorage.removeItem('coffeeDeliveyOrderList');
+}
+

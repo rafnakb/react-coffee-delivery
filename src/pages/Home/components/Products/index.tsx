@@ -1,6 +1,6 @@
+import { OrderContext } from "@src/contexts/OrderContext";
 import { Coffee } from "phosphor-react";
 import { useContext } from "react";
-import { OrderContext } from "../../../../contexts/OrderContext";
 import { ProductCard } from "./ProductCard";
 import { TagBox, ProductsContainer, ProductsGrid, EmptyList, TitleAndFilters } from "./styles";
 

@@ -1,6 +1,6 @@
+import { OrderContext, Product } from "@src/contexts/OrderContext";
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
 import { useContext, useState } from "react";
-import { Product, OrderContext } from "../../../../../contexts/OrderContext";
 
 import {
   BuyContainer,

@@ -8,7 +8,7 @@ import {
   HeroContentContainer
 } from "./styles";
 import { Coffee, Package, ShoppingCart, Timer } from 'phosphor-react'
-import heroCoffee from '../../../../assets/hero-coffee.svg';
+import heroCoffee from '@src/assets/hero-coffee.svg';
 
 export function HeroContent() {
   return (

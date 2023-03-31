@@ -1,18 +1,25 @@
 import { NoteBlank } from "phosphor-react";
-import { useContext } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { OrderContext } from "../../contexts/OrderContext";
-import { getAllOrderFromStorage } from "../../reducers/order-reducers";
+import { deleteOrderListFromStorage, getAllOrderFromStorage, OrderData } from "../../reducers/order-reducers";
 import { formatCoinToBrazil } from "../../utils/text-formatter";
-import { EmptyContainer, OrderListContainer, OrderTable } from "./styles";
+import { ClearButton, EmptyContainer, OrderListContainer, OrderTable } from "./styles";
 
 export function OrderList() {
   const navigate = useNavigate();
+  const [orderList, setOrderList] = useState<OrderData[]>([]);
 
-  let orderList = getAllOrderFromStorage();
+  useEffect(() => {
+    setOrderList(getAllOrderFromStorage());
+  }, [orderList])
 
   function handleGetOrderId(orderId: string) {
     navigate(`/order-confirmation/${orderId}`);
+  }
+
+  function handleDeleteOrderList() {
+    deleteOrderListFromStorage();
+    setOrderList([]);
   }
 
   const isOrderListEmpty = orderList.length === 0;
@@ -53,6 +60,9 @@ export function OrderList() {
               </tbody>
             </table>
           </OrderTable>
+          <ClearButton onClick={handleDeleteOrderList}>
+            Limpar lista de pedidos
+          </ClearButton>
         </>
       )}
 

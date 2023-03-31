@@ -3,8 +3,18 @@ import { FilterModel, ProductModel } from "../pages/Home/components/Products";
 import { PRODUCTS } from "../api-data/app-data";
 import { productsReducers } from "../reducers/products-reducers";
 import { getOrderFromStorage, OrderData, orderReducer } from "../reducers/order-reducers";
-import { useNavigate } from "react-router-dom";
-import { addProductsToOrderAction, confirmOrderAction, decrementQuantityOfProductAction, filterProductsAction, getAllProductsAction, incrementQuantityOfProductAction, removeProductsToOrderAction, resetOrderAction, updateAddressAction, updatePaymentAction } from "../reducers/actions";
+import {
+  addProductsToOrderAction,
+  confirmOrderAction,
+  decrementQuantityOfProductAction,
+  filterProductsAction,
+  getAllProductsAction,
+  incrementQuantityOfProductAction,
+  removeProductsToOrderAction,
+  resetOrderAction,
+  updateAddressAction,
+  updatePaymentAction
+} from "../reducers/actions";
 
 export interface DeliveryAddress {
   cep: string;

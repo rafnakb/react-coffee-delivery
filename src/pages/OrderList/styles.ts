@@ -117,3 +117,20 @@ export const EmptyContainer = styled.div`
     border-top: 1px solid ${props => props.theme['gray-400']};
   }
 `;
+
+export const ClearButton = styled.button`
+  display: flex;
+  justify-content: center;
+  padding: 1rem 1rem;
+  color: ${props => props.theme['gray-700']};
+  background-color: ${(props) => props.theme['gray-400']};
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+
+  &:hover {
+    color: ${props => props.theme['purple-500']};
+    background-color: ${(props) => props.theme['purple-300']};
+  }
+`;
