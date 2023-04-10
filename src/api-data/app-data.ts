@@ -11,7 +11,7 @@ export const PRODUCTS = [
     name: 'Expresso Tradicional',
     description: 'O tradicional café feito com água quente e grãos moídos',
     price: 9.9,
-    imageUrl: '@src/assets/products/expresso-tradicional.svg'
+    imageUrl: '/src/assets/products/expresso-tradicional.svg'
   },
   {
     id: 2,

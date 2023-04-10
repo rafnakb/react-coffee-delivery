@@ -10,6 +10,7 @@ import {
   ProductCardContainer,
   TagContainer,
 } from "./styles";
+import { ProductImage } from "../ProductImage";
 
 interface ProductProps {
   id: number;
@@ -55,7 +56,10 @@ export function ProductCard({ ...props }: ProductProps) {
 
   return (
     <ProductCardContainer>
-      <img src={props.imageUrl} alt="" />
+      {/* <img src={props.imageUrl} alt="" /> */}
+      <ProductImage
+        src={props.imageUrl}
+      />
       <TagContainer>
         {props.tags.map(tag => {
           return <span
