@@ -1,6 +1,6 @@
 import { OrderContext, Product } from "@src/contexts/OrderContext";
 import { Minus, Plus, ShoppingCartSimple } from "phosphor-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import {
   BuyContainer,
@@ -10,7 +10,6 @@ import {
   ProductCardContainer,
   TagContainer,
 } from "./styles";
-import { ProductImage } from "../ProductImage";
 
 interface ProductProps {
   id: number;
@@ -56,10 +55,7 @@ export function ProductCard({ ...props }: ProductProps) {
 
   return (
     <ProductCardContainer>
-      {/* <img src={props.imageUrl} alt="" /> */}
-      <ProductImage
-        src={props.imageUrl}
-      />
+      <img src={props.imageUrl} alt="" />
       <TagContainer>
         {props.tags.map(tag => {
           return <span
