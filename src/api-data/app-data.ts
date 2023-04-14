@@ -11,7 +11,7 @@ export const PRODUCTS = [
     name: 'Expresso Tradicional',
     description: 'O tradicional café feito com água quente e grãos moídos',
     price: 9.9,
-    imageUrl: '../public/assets/products/expresso-tradicional.svg'
+    imageUrl: '/assets/expresso-tradicional.svg'
   },
   {
     id: 2,
@@ -19,7 +19,7 @@ export const PRODUCTS = [
     name: 'Expresso Americano',
     description: 'Expresso diluído, menos intenso que o tradicional',
     price: 9.9,
-    imageUrl: '../public/assets/products/expresso-americano.svg'
+    imageUrl: '/assets/expresso-americano.svg'
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ export const PRODUCTS = [
     name: 'Expresso Cremoso',
     description: 'Café expresso tradicional com espuma cremosa',
     price: 9.9,
-    imageUrl: '../public/assets/products/expresso-cremoso.svg'
+    imageUrl: '/assets/expresso-cremoso.svg'
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ export const PRODUCTS = [
     name: 'Expresso Gelado',
     description: 'Bebida preparada com café expresso e cubos de gelo',
     price: 9.9,
-    imageUrl: '../public/assets/products/expresso-gelado.svg'
+    imageUrl: '/assets/expresso-gelado.svg'
   },
   {
     id: 5,
@@ -43,7 +43,7 @@ export const PRODUCTS = [
     name: 'Café com Leite',
     description: 'Meio a meio de expresso tradicional com leite vaporizado',
     price: 9.9,
-    imageUrl: '../public/assets/products/cafe-com-leite.svg'
+    imageUrl: '/assets/cafe-com-leite.svg'
   },
   {
     id: 6,
@@ -51,7 +51,7 @@ export const PRODUCTS = [
     name: 'Latte',
     description: 'Uma dose de café expresso com o dobro de leite e espuma cremosa',
     price: 9.9,
-    imageUrl: '../public/assets/products/latte.svg'
+    imageUrl: '/assets/latte.svg'
   },
   {
     id: 7,
@@ -59,7 +59,7 @@ export const PRODUCTS = [
     name: 'Capuccino',
     description: 'Bebida com canela feita de doses iguais de café, leite e espuma',
     price: 9.9,
-    imageUrl: '../public/assets/products/capuccino.svg'
+    imageUrl: '/assets/capuccino.svg'
   },
   {
     id: 8,
@@ -67,7 +67,7 @@ export const PRODUCTS = [
     name: 'Macchiato',
     description: 'Café expresso misturado com um pouco de leite quente e espuma',
     price: 9.9,
-    imageUrl: '../public/assets/products/macchiato.svg'
+    imageUrl: '/assets/macchiato.svg'
   },
   {
     id: 9,
@@ -75,7 +75,7 @@ export const PRODUCTS = [
     name: 'Mocaccino',
     description: 'Café expresso com calda de chocolate, pouco leite e espuma',
     price: 9.9,
-    imageUrl: '../public/assets/products/mocaccino.svg'
+    imageUrl: '/assets/mocaccino.svg'
   },
   {
     id: 10,
@@ -83,7 +83,7 @@ export const PRODUCTS = [
     name: 'Chocolate Quente',
     description: 'Bebida feita com chocolate dissolvido no leite quente e café',
     price: 9.9,
-    imageUrl: '../public/assets/products/chocolate-quente.svg'
+    imageUrl: '/assets/chocolate-quente.svg'
   },
   {
     id: 11,
@@ -91,7 +91,7 @@ export const PRODUCTS = [
     name: 'Cubano',
     description: 'Drink gelado de café expresso com rum, creme de leite e hortelã',
     price: 9.9,
-    imageUrl: '../public/assets/products/cubano.svg'
+    imageUrl: '/assets/cubano.svg'
   },
   {
     id: 12,
@@ -99,7 +99,7 @@ export const PRODUCTS = [
     name: 'Havaiano',
     description: 'Bebida adocicada preparada com café e leite de coco',
     price: 9.9,
-    imageUrl: '../public/assets/products/havaiano.svg'
+    imageUrl: '/assets/havaiano.svg'
   },
   {
     id: 13,
@@ -107,7 +107,7 @@ export const PRODUCTS = [
     name: 'Árabe',
     description: 'Bebida preparada com grãos de café árabe e especiarias',
     price: 9.9,
-    imageUrl: '../public/assets/products/arabe.svg'
+    imageUrl: '/assets/arabe.svg'
   },
   {
     id: 14,
@@ -115,6 +115,6 @@ export const PRODUCTS = [
     name: 'Irlandês',
     description: 'Bebida a base de café, uísque irlandês, açúcar e chantilly',
     price: 9.9,
-    imageUrl: '../public/assets/products/irlandes.svg'
+    imageUrl: '/assets/irlandes.svg'
   }
 ]
