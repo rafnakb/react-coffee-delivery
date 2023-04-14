@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const HeroContainer = styled.div`
   width: var(--wideSize);
-  background-image: url('src/assets/hero-background.png');
+  background-image: url('/assets/hero-background.svg');
 `;
 
 export const HeroContentContainer = styled.div`
